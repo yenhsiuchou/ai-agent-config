@@ -48,3 +48,14 @@ it is more specific or stricter.
 - For a PR description, design document, new pass, or large diff, run the
   `reader-first-writing` cold-reader check when independent reviewer tooling is
   available.
+
+## Personal Skill Ownership
+
+- Treat this repository's `skills/` directory as the sole source of truth for
+  the user's reusable skills. Create and update personal or cross-project
+  skills here, then install them through this repository's `install.sh`.
+- Add a skill to a project's `.agents/skills/` only when the user explicitly
+  requests a project-owned shared workflow, or when the skill inherently
+  depends on that project's code, tools, contracts, or team process. Do not
+  copy a personal skill into a project repository for convenience.
+- When ownership is unclear, ask before choosing a skill location.
