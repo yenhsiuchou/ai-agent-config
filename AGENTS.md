@@ -59,3 +59,13 @@ it is more specific or stricter.
   depends on that project's code, tools, contracts, or team process. Do not
   copy a personal skill into a project repository for convenience.
 - When ownership is unclear, ask before choosing a skill location.
+
+## Review Skill Selection
+
+- When the user asks for a design review or architecture review, use
+  `system-design-review`, including when the target is a PR number or URL. A PR
+  target alone does not select `review-pr`.
+- Use `review-pr` or `review-diff` only when the user asks for code review,
+  correctness review, a full review, or explicitly names one of those skills.
+  When the user explicitly requests both review types, run both and keep their
+  findings distinct until duplicate root causes are merged.
