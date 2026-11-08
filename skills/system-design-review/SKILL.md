@@ -1,12 +1,14 @@
 ---
 name: system-design-review
-description: Review a code change for evidenced system-design problems in problem framing, ownership, architecture boundaries, lifecycle cost, and evolution. Use as a separate lens alongside, not instead of, routine correctness, performance, security, and test review.
+description: Perform an evidenced design or architecture review of a PR, diff, or code change. Use when the user says design review, even with a PR number; do not replace it with routine review-pr unless that review is also explicitly requested.
 ---
 
 # System Design Review
 
-Use this skill for a design-focused review of a PR, commit, range, branch, or
-working-tree diff. It is useful when a change adds a compiler pass, IR
+Use this skill when the user asks for a design review or architecture review of
+a PR, commit, range, branch, or working-tree diff. A PR number or URL names
+the target; it does not request routine `review-pr`. This skill is useful when
+a change adds a compiler pass, IR
 contract, cross-layer interface, runtime policy, representation change, or
 other decision whose effects extend beyond one local implementation.
 
