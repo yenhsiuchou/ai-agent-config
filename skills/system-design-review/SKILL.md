@@ -137,11 +137,11 @@ Then use this structure for every reported item:
 - **Next step:** ...
 ```
 
-For Sonic-mlir compiler changes, read
-`skills/system-design-review/references/sonic-mlir-middle-end.md` when
-the diff touches a pipeline, IR contract, collective communication, NoC,
-resource mapping, or backend lowering. Read only the sections selected by the
-changed boundary. In particular, read its semantic-contract navigation when a
-diff changes a loop classification, machine-coordinate predicate, or spatial
-flag. For calibrated examples and maintenance rules, read
-`skills/system-design-review/references/calibrated-cases.md`.
+For Sonic-mlir compiler changes, optionally read the local, non-versioned
+context at `~/.agent-config-local/system-design-review/sonic-mlir/` when it is
+available. Read `sonic-mlir-middle-end.md` for pipeline, IR, communication,
+NoC, resource-mapping, or backend-lowering changes; read
+`calibrated-cases.md` for confirmed review calibrations. Read only the sections
+selected by the changed boundary. If this local context is absent, do not infer
+Sonic-specific architecture from this skill; state that the review needs the
+live project contracts and has that evidence limit.
