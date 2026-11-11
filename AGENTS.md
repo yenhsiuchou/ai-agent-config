@@ -69,3 +69,6 @@ it is more specific or stricter.
   correctness review, a full review, or explicitly names one of those skills.
   When the user explicitly requests both review types, run both and keep their
   findings distinct until duplicate root causes are merged.
+- When the user asks for a review by both Claude and Codex, or for a
+  cross-agent or consensus review, use `cross-agent-review`. It runs both the
+  design review and the code review in each agent.
