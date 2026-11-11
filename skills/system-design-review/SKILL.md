@@ -46,6 +46,18 @@ exist and at the component responsible for its resulting state transition.
 information needed for it. It does not mean that every feature must use one
 pass: preparation and emission may belong at different information boundaries.
 
+Before you report that a decision ignores a cost, find the component that owns
+that cost: a pass in the pipeline, a PR in the same stack, or an open PR by the
+same author. When another component owns it, judge each component against its
+own objective. Do not ask the upstream component to also optimize the
+downstream cost; that merges two decisions that the ownership timeline keeps
+apart. Report only a cost that the change leaves without an owner, or an
+interim state the author does not acknowledge.
+
+Report the reverse case. When one component optimizes objectives whose
+information or decision belongs to different owners, give the owner table and
+propose splitting the decision at that boundary.
+
 Compare alternatives only against the project's actual goal and usage. Include
 runtime, compile-time, memory, maintenance, test, debugging, coupling, and
 foreclosed-option costs that the available evidence supports. A more specialized
