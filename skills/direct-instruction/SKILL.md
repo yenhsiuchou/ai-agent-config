@@ -91,7 +91,16 @@ why the design follows from constraints.
 - Separate **structure** (connections), **time** (ordering), and **space**
   (layout or range). Split diagrams that need artificial edges to combine them.
 - Reuse one minimal, complete example throughout the map.
-- Start with a table mapping figures to the chapters that explain them.
+- Start with a table mapping sections to the chapters that explain them.
+- Before any new material, recap every concept the course builds on that the
+  learner already knows (nodes marked `understood` and assumed background).
+  Keep each recap short: what it is, the rule or mechanism in one small code
+  or formula block, and the case it handles or rejects. The recap fixes the
+  shared vocabulary that the new material then changes or extends. When the
+  topic changes an existing mechanism (for example, a PR), recap the current
+  behavior first; this is the baseline, not history. Title the section
+  `Recap: <the concepts recapped>`, not a generic label, and do not add a
+  sentence that announces what the recap is for.
 - After every figure, state relevant design choices and reasons. Exclude
   historical versions, old bugs, review findings, and project evolution.
 - End with Key Formulas and a Glossary.
@@ -114,8 +123,10 @@ For every concept, complete: research → material → source audit → learner 
 2. Before drafting, state the learner-facing contract: one question it answers,
    input, output, and one normal success or failure example. Split or reorder a
    concept that cannot be stated without unknown terms.
-3. Write `[slug]_material_chNN_[concept].md`. It must be self-contained. Start
-   with the concrete need, state the contract, then explain the method or math.
+3. Write `[slug]_material_chNN_[concept].md`. It must be self-contained. Follow
+   the order in Presentation Style: what the chapter does, a short recap of the
+   known concepts it depends on (so the learner and the material share terms),
+   then the concrete need, the contract, and the method or math.
    State boundaries, misconceptions, and where analogies fail. Mark uncertainty
    with `⚠️ Needs verification`.
 4. Audit material against recorded sources before giving it to the learner:
@@ -203,20 +214,52 @@ Use English for file titles, section headings, metadata labels, table headers,
 diagram text, and status values. Write pedagogical prose in the learner's
 language. Keep code and technical terms in English where clearer.
 
+### Presentation Style
+
+Lead with pictures, not prose. A chapter whose core argument is a wall of text
+must be rewritten before the learner reads it.
+
+- **Reading time ≤ 20 minutes.** Split a concept that needs more.
+- **Open every chapter with `## What This Chapter Does`**, before the recap:
+  the one question the chapter answers, the high-level concept in one or two
+  sentences (the intuition the rest of the chapter makes precise), and where
+  it sits in the course and in the learner's goal (for a PR review: which
+  review decision it enables). Short chapters still need this.
+- **Order**: purpose → recap → one concrete reject or failure case drawn as a picture →
+  one accept case → the rule in three lines → why the rule holds (a DOT flow of
+  premises to conclusion, plus a short "missing it breaks because" table) →
+  the few code lines that implement it → a table of worked cases →
+  boundaries as bullets.
+- **Descriptive headings.** In every chapter, including Ch00, title each
+  section and figure by what it shows (for example, "Writes To One Element:
+  Same Order Before And After"), never "Fig N". Cross-references use the title.
+- **Explain with index expressions.** For an access or layout, give a table of
+  result dim → expression → which loop it pins, then draw the iteration grid
+  with the element each cell touches. Keep prose to the sentence each figure
+  needs.
+- **Real IR only**, trimmed, produced by the actual binary.
+- **Interactive explorer** when the concept is "change a choice, watch the
+  outcome" (loop order, cut choice, packet flow). Embed it inline in the
+  Markdown, and read `references/interactive-explorer.md` before building
+  one.
+
 Use this chapter shape when it fits:
 
 ````markdown
 # ChNN: [Concept Name]
 
-> **Reading time**: ~N minutes
+> **Reading time**: ~N minutes (≤ 20)
 > **Prerequisites**: ChNN or none
 
-## 1. Problem: Why This Concept Exists
-## 2. Core Insight
-## 3. Mechanism
-## 4. Worked Example
-## 5. Misconceptions And Boundaries
-## 6. Relations To Other Concepts
+## What This Chapter Does
+## Recap: [the concepts recapped]
+## [Reject case, titled by what it shows]
+## [Accept case, titled by what it shows]
+## The Rule
+## Why The Rule Holds
+## Implementation
+## Worked Cases
+## Boundaries And Misconceptions
 ## References
 ````
 
