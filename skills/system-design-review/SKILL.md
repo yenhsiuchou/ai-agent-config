@@ -23,6 +23,13 @@ cause; this skill contributes the system-level evidence.
 1. Resolve the review target and read its goal, full changed files, and relevant
    tests. Read the source and documentation that define a changed interface or
    pass contract, rather than inferring intent from a diff alone.
+1. Read the design documents in the repository that the change or its stack
+   builds on, before judging its intent.
+1. When a change applies a transformation in more cases than its description
+   motivates, find the check that makes the transformation necessary before
+   you question its scope. Trace the failing precondition to the IR contract
+   it enforces. If the transformation restores that contract, the contract
+   defines its scope, not the description's motivation.
 1. Record a short ledger:
    - **Facts:** behavior established by code, tests, measurements, or docs.
    - **Assumptions:** claims that depend on an unverified condition.
@@ -115,8 +122,12 @@ Report a candidate only when the review can establish all of these:
 - a location and evidence;
 - a concrete trigger;
 - a meaningful impact on a user, contract, stage, cost, or failure mode; and
-- a minimum next step: a focused change or a verification that resolves the
-  uncertainty.
+- a minimum next step: a focused change that passes the fix check below, or a
+  verification that resolves the uncertainty.
+
+Measure a cost at the stage where it is paid. An op count after an early pass
+is not a runtime or compile-time cost; lower the IR to where the cost
+materializes, or do not claim the cost.
 
 Use these categories:
 
@@ -138,10 +149,47 @@ moves to the owner, which cross-stage dependency disappears, and how to verify
 the result. Do not fabricate a replacement architecture when the owner or
 contract is unknown.
 
+## Fix Check
+
+A proposed fix applies the ownership rule above to the fix itself. Apply this
+check to the Next step of every finding, including a code finding from another
+review engine:
+
+- **Owner:** for each concept the fix decides (which ops read a value, what an
+  output is, which check rejects a case), name its existing definition: a
+  helper, interface, verifier, or pass. Reuse it or move the decision there.
+  Do not define the concept a second time in the changed code.
+- **Same class:** list the inputs that the fix classifies differently from the
+  current code, including variants of the trigger (for example, the same read
+  that is also written). Check each against the existing checks and tests on
+  that path. The fix must not let one of them skip a check.
+- Prefer a fix that removes a special case over one that adds a rule.
+
+When a fix cannot pass this check, give the check that settles the question
+instead of a fix.
+
 ## Output
 
-Start with a two- or three-sentence model of the change and its evidence limits.
-Then use this structure for every reported item:
+Start with a **Background** that explains the change to a reader who has not
+read the PR, so the findings make sense on their own. Write it from the code
+and the PR text, and mark any intent the evidence does not establish.
+
+- **Problem:** one sentence of intuition, then a real, trimmed IR or code
+  snippet (from the PR's tests or a probe) that shows what goes wrong without
+  the change.
+- **Approach:** what the change does to that snippet, or the rule it adds, in a
+  few sentences. Name new functions only where a finding refers to them.
+- **Terms:** define once each term that the findings use and the reader may not
+  know, such as a pass-specific concept. For a tensor or machine concept, use
+  an index expression, not prose.
+- **Where the findings hit:** one line per finding that points at the part of
+  the problem or approach it questions.
+- **Evidence limits:** what the review could not check.
+
+Keep the background to what the findings need, about one screen. Start each
+finding with one plain sentence that ties it to the background, such as "In
+the dispatch example above, the routing step also reads the table." Then use
+this structure for every reported item:
 
 ```markdown
 ### <category>: <short title>

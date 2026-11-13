@@ -57,8 +57,8 @@ before designing the course.
 
 ### Build The Concept DAG And Research It
 
-Make each node independently teachable and assessable, normally requiring
-30–60 minutes of reading. Use five to ten nodes unless real complexity calls
+Make each node independently teachable and assessable within the chapter
+reading-time limit in Presentation Style. Use five to ten nodes unless real complexity calls
 for a different size. Draw `A -> B` when B requires A.
 
 `ch00_overview` is the sole root and every concept depends on it. Mark concepts
@@ -91,7 +91,8 @@ why the design follows from constraints.
 - Separate **structure** (connections), **time** (ordering), and **space**
   (layout or range). Split diagrams that need artificial edges to combine them.
 - Reuse one minimal, complete example throughout the map.
-- Start with a table mapping sections to the chapters that explain them.
+- Open with `## What This Chapter Does`, as every chapter does. Follow it with
+  a table mapping sections to the chapters that explain them, then the recap.
 - Before any new material, recap every concept the course builds on that the
   learner already knows (nodes marked `understood` and assumed background).
   Keep each recap short: what it is, the rule or mechanism in one small code
@@ -123,11 +124,8 @@ For every concept, complete: research → material → source audit → learner 
 2. Before drafting, state the learner-facing contract: one question it answers,
    input, output, and one normal success or failure example. Split or reorder a
    concept that cannot be stated without unknown terms.
-3. Write `[slug]_material_chNN_[concept].md`. It must be self-contained. Follow
-   the order in Presentation Style: what the chapter does, a short recap of the
-   known concepts it depends on (so the learner and the material share terms),
-   then the concrete need, the contract, and the method or math.
-   State boundaries, misconceptions, and where analogies fail. Mark uncertainty
+3. Write `[slug]_material_chNN_[concept].md`. It must be self-contained and
+   follow the section order in Presentation Style. State boundaries, misconceptions, and where analogies fail. Mark uncertainty
    with `⚠️ Needs verification`.
 4. Audit material against recorded sources before giving it to the learner:
    - verify factual claims, calculations, examples, code, and IR;

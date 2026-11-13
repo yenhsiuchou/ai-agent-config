@@ -32,7 +32,8 @@ files, not only the diff.
 **Output:** your final message is the deliverable. Write it in English with
 these sections in order:
 
-1. A two-sentence summary of the change.
+1. A two-sentence summary of the change, in place of the Background that
+   `system-design-review` asks for.
 1. `## Design findings`
 1. `## Code findings`
 1. `## Coverage`: the skills and engine you followed, each specialist or check
