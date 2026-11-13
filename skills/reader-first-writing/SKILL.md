@@ -50,8 +50,9 @@ when a wrong choice would materially change the text.
   Follow project-specific PR rules when present.
 - **Design doc:** Begin with the problem and a real code or IR example, then
   present the model. Define each term once in a short `Terms` table.
-- **Review reply:** State what changed, with a commit when useful, or why no
-  change is made. Add at most a short reason.
+- **Review reply:** State what changed in the code or doc, or why no change is
+  made. Add at most a short reason. Do not cite a commit or hash; the reviewer
+  reads the current diff.
 - **Commit message:** The subject says what the change does in code names. Add
   a body only when the reason is not obvious.
 

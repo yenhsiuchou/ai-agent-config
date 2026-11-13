@@ -123,8 +123,12 @@ arguments. When a local build exists, reproduce runtime claims with it, and run
 each probe that may crash in its own process.
 
 Write every finding in the format of `references/finding-format.md`. Claude
-uses IDs `CL-1`, `CL-2`, …; Codex uses `CX-1`, `CX-2`, …. End your review with
-the same `## Coverage` section the peer prompt asks for.
+uses IDs `CL-1`, `CL-2`, …; Codex uses `CX-1`, `CX-2`, …. Use the section
+order the peer prompt asks for, including the two-sentence summary in place of
+the Background; the full Background is written once, in the report.
+
+Apply the Fix Check of `system-design-review` to the Next step of every
+finding, code findings included.
 
 Check the peer's output before you use it. Rerun the peer once, naming what is
 missing, when:
@@ -167,7 +171,7 @@ revision from the orchestrator reaches the peer in the next round.
 | -------------------- | --------------------------------------------------------- |
 | `agree`              | The finding is valid as currently written.                |
 | `disagree`           | The finding is wrong; give code, IR, or test evidence.    |
-| `revise: <change>`   | Valid after a change to category, severity, or wording.   |
+| `revise: <change>`   | Valid after a change to category, wording, or Next step.  |
 | `withdraw`           | Only for one's own finding: it is wrong.                  |
 | `duplicate-of: <ID>` | Same root cause as another row; keep the clearer one.      |
 | `keep`               | Only for one's own finding: no change from its last text. |
@@ -175,6 +179,10 @@ revision from the orchestrator reaches the peer in the next round.
 An answer that disputes a finding must cite evidence, such as a file and line,
 an IR snippet, or a test command and its output. An answer without evidence
 counts as `agree`.
+
+Each answer covers the Next step too. If the Next step fails the Fix Check of
+`system-design-review`, answer `revise` with a Next step that passes,
+and cite the owner or the same-class input as evidence.
 
 After both answers, update each row from its current text:
 
@@ -205,8 +213,11 @@ round.
 Write `final.md`, then show it to the user in their preferred language:
 
 1. **Target:** the reviewed SHA range and the run directory.
+1. **Background:** the Background defined in the Output section of
+   `system-design-review`, written for the accepted findings.
 1. **Consensus findings:** accepted findings, most severe first, design and
-   code findings in separate lists. Use the format in
+   code findings in separate lists. Start each finding with one plain sentence
+   that ties it to the background, then use the format in
    `references/finding-format.md`.
 1. **Unresolved disagreements:** for each row, the finding, the strongest
    argument from each agent with its evidence, and the check that would decide
@@ -216,5 +227,8 @@ Write `final.md`, then show it to the user in their preferred language:
 1. **Process:** rounds used, peer reruns or failures, and coverage gaps from
    either agent's `## Coverage`, such as tests that neither agent could run.
 
-Do not post anything to GitHub. If the user asks to post, follow their
-repository's review-posting rules.
+When the user asks for text for the author, use the `review-comment-drafting`
+skill with the accepted findings the user picks.
+
+Do not post anything to GitHub. If the user asks to post, follow
+`review-comment-drafting`.

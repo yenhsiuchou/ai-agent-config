@@ -21,7 +21,7 @@ the ledger.
 | -------------------- | --------------------------------------------------------- |
 | `agree`              | The finding is valid as currently written.                |
 | `disagree`           | The finding is wrong; give code, IR, or test evidence.    |
-| `revise: <change>`   | Valid after a change to category, severity, or wording.   |
+| `revise: <change>`   | Valid after a change to category, wording, or Next step.  |
 | `withdraw`           | Only for your own finding: it is wrong.                   |
 | `duplicate-of: <ID>` | Same root cause as another row; keep the clearer one.      |
 | `keep`               | Only for your own finding: no change from your last text. |
@@ -36,6 +36,10 @@ further change, answer `revise` with the full new text.
 - `disagree` and `revise` must cite evidence: file and line, an IR snippet, or
   a test command with its output. An answer without evidence counts as
   `agree`.
+- Answer the Next step too. If it fails the Fix Check of the
+  `system-design-review` skill (it defines an existing concept a second time, or lets a same-class input
+  skip an existing check), answer `revise` with a Next step that passes, and
+  cite the owner or the input as evidence.
 - Do not raise new findings. A new problem found while checking a claim goes
   under `## Late findings` in the finding format.
 - If the ledger misstates one of your earlier answers, add a line
