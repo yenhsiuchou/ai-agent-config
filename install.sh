@@ -32,4 +32,32 @@ for skill_dir in "$repository_dir"/skills/*; do
   link_path "$skill_dir" "$HOME/.claude/skills/$skill_name"
 done
 
+for hook_path in "$repository_dir"/hooks/*; do
+  link_path "$hook_path" "$HOME/.claude/hooks/$(basename "$hook_path")"
+done
+
+# Adds each hook entry in claude/settings-hooks.json to ~/.claude/settings.json
+# unless an entry with the same command is already there. Other settings are
+# left unchanged.
+merge_claude_hook_settings() {
+  local settings_path="$HOME/.claude/settings.json"
+  local hooks_path="$repository_dir/claude/settings-hooks.json"
+  local merged_path
+
+  [[ -e "$settings_path" ]] || echo '{}' > "$settings_path"
+  merged_path="$(mktemp)"
+  jq --slurpfile fragment "$hooks_path" '
+    reduce ($fragment[0].hooks | to_entries[]) as $event (.;
+      .hooks[$event.key] = (
+        (.hooks[$event.key] // []) as $current
+        | ($current | [.[].hooks[]?.command]) as $installed
+        | $current + [$event.value[]
+            | select(([.hooks[].command] - $installed) | length > 0)]
+      ))
+  ' "$settings_path" > "$merged_path"
+  mv "$merged_path" "$settings_path"
+}
+
+merge_claude_hook_settings
+
 echo "Installed shared agent configuration from $repository_dir"
