@@ -6,8 +6,9 @@ Shared, tool-neutral preferences and reusable skills for coding agents.
 
 - `AGENTS.md`: global working preferences.
 - `skills/`: reusable workflows with the Agent Skills `SKILL.md` format.
-- `hooks/`: Claude Code hook scripts, such as the confirmation before posting
-  a GitHub PR review or comment.
+- `hooks/`: Claude Code hook scripts: the confirmation before posting a
+  GitHub PR review or comment, and the `[<PR number>]` prefix on the title of
+  a session that reviews a PR.
 - `claude/settings-hooks.json`: the hook entries that use those scripts.
 - `install.sh`: links this repository into Codex and Claude Code.
 

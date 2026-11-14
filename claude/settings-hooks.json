@@ -11,6 +11,17 @@
           }
         ]
       }
+    ],
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 ~/.claude/hooks/title-review-session-with-pr-number.py",
+            "timeout": 10
+          }
+        ]
+      }
     ]
   }
 }
