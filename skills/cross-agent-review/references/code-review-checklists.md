@@ -1,6 +1,6 @@
 # Code Review Checklists
 
-Run these three checklists in every code review, in addition to the engine or
+Run these four checklists in every code review, in addition to the engine or
 the general checks. Put each table in the review's `## Coverage` section, even
 when it has no gap. A row with a gap becomes a finding, or a reason why not.
 
@@ -52,11 +52,38 @@ For each new or changed test assertion, check:
 
 Report each hit as `Missing test` or `Maintainability`.
 
+## 4. Dropped Relations and Upstream Guarantees
+
+A rewrite that rebuilds output from parts of its input, such as one loop per
+dim, one value per slot, or one op per element, keeps only the relations it
+copies. Any relation between those parts that it does not copy is dropped:
+a value shared by two dims, an equality between bounds, or an order between
+ops.
+
+| Rewrite | Input relation not copied | Rejected by (file:line on the live path) | Probe and its reject reason | Gap |
+| ------- | ------------------------- | ---------------------------------------- | --------------------------- | --- |
+
+Use the same table for every claim that an upstream analysis, verifier, or
+caller rejects an input, whether the claim is in the code, the author's
+description, or your own reasoning.
+
+- **Rejected by:** the line that runs on this path, read in full. A helper with
+  a fitting name that the path does not call is not evidence.
+- **Probe:** an input built to pass that rule's weak points: `front()`, the
+  first match, an early `break`, a check of one side only, or a check of each
+  dim alone without the relations between dims. Record the reason the probe was
+  rejected. A probe rejected by a different rule is not evidence for this one.
+- **Gap:** without both columns filled, treat the input as reachable. Report a
+  missing check as `Bug` when a probe reaches wrong output, else as
+  `Missing test` or `Maintainability`. An assert on such an input is a `Bug`
+  finding, because a debug build crashes and a release build produces wrong
+  output.
+
 ## Low-Severity Fixes
 
 A finding from these checklists may have no failing input in the current
-callers. Report it when the fix is local and cheap, such as an assert, a
-stronger assertion, or a sentence in a doc comment. Use the `Maintainability`
+callers. Report it when the fix is local and cheap, such as an assert of a
+caller precondition, a stronger assertion, or a sentence in a doc comment. Use the `Maintainability`
 or `Nit` category, write the input that would reach it as the Trigger, and
 start the Next step with `Optional:`. Do not drop it for lack of a current
 caller.

@@ -36,6 +36,10 @@ further change, answer `revise` with the full new text.
 - `disagree` and `revise` must cite evidence: file and line, an IR snippet, or
   a test command with its output. An answer without evidence counts as
   `agree`.
+- An answer that says an input cannot reach the code must give the enforcing
+  line on the live call path and a probe rejected with that rule's reason, as
+  checklist 4 in `{{SKILL_DIR}}/references/code-review-checklists.md` asks.
+  Otherwise it counts as `agree`.
 - Answer the Next step too. If it fails the Fix Check of the
   `system-design-review` skill (it defines an existing concept a second time, or lets a same-class input
   skip an existing check), answer `revise` with a Next step that passes, and

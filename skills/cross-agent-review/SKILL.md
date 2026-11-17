@@ -57,14 +57,14 @@ with the script; it fails when a placeholder is left unfilled:
 ```bash
 python3 <skill-dir>/scripts/render_prompt.py \
   <skill-dir>/references/peer-exchange-prompt.md <run-dir>/prompt-round-2-codex.md \
-  RUN_DIR=<run-dir> PEER_NAME=Codex PREFIX=CX ROUND=2 \
+  RUN_DIR=<run-dir> SKILL_DIR=<skill-dir> PEER_NAME=Codex PREFIX=CX ROUND=2 \
   "PREVIOUS_ROUND_FILES=<run-dir>/round-1-codex.md, <run-dir>/round-1-claude.md"
 ```
 
 | Template                 | Keys                                                         |
 | ------------------------ | ------------------------------------------------------------ |
 | `peer-review-prompt.md`  | `RUN_DIR`, `SKILL_DIR`, `PREFIX`                             |
-| `peer-exchange-prompt.md`| `RUN_DIR`, `PEER_NAME`, `PREFIX`, `ROUND`, `PREVIOUS_ROUND_FILES` |
+| `peer-exchange-prompt.md`| `RUN_DIR`, `SKILL_DIR`, `PEER_NAME`, `PREFIX`, `ROUND`, `PREVIOUS_ROUND_FILES` |
 
 For round 1, set `PREVIOUS_ROUND_FILES=none (this is round 1)`. Put any extra
 instruction in `target.md` or `ledger.md`, not in the rendered prompt.
@@ -120,10 +120,10 @@ Each review has two parts:
    follow that engine but do not post to GitHub. Otherwise, check correctness,
    boundary and degraded paths, error handling, invariants across callers,
    and test coverage of the changed behavior.
-1. **Code review checklists:** run the three checklists in
+1. **Code review checklists:** run the four checklists in
    `references/code-review-checklists.md` (parameter contracts, branches and
-   tests, assertion quality) whichever engine ran, and put their tables in
-   `## Coverage`.
+   tests, assertion quality, dropped relations and upstream guarantees)
+   whichever engine ran, and put their tables in `## Coverage`.
 
 For each new public API, check empty, negative, duplicate, and wrong-typed
 arguments; the parameter-contract table records the result. When a local build exists, reproduce runtime claims with it, and run
@@ -144,7 +144,7 @@ missing, when:
 - its `## Coverage` section is missing, or shows that it skipped the design
   review or the code-review engine without a reason such as a missing skill;
   or
-- its `## Coverage` section lacks any of the three checklist tables.
+- its `## Coverage` section lacks any of the four checklist tables.
 
 If the rerun fails the same check, stop as for a peer failure.
 
@@ -187,7 +187,9 @@ revision from the orchestrator reaches the peer in the next round.
 
 An answer that disputes a finding must cite evidence, such as a file and line,
 an IR snippet, or a test command and its output. An answer without evidence
-counts as `agree`.
+counts as `agree`. An answer that says an input cannot reach the code must
+give both columns of checklist 4, the enforcing line and a probe rejected with
+that rule's reason; otherwise it counts as `agree`.
 
 Each answer covers the Next step too. If the Next step fails the Fix Check of
 `system-design-review`, answer `revise` with a Next step that passes,
