@@ -21,6 +21,10 @@ sentences, and put long evidence in a fenced block below it.
 Report a finding only when its location, trigger, and impact are supported by
 evidence. Drop a finding that cannot be shown on the real code or IR.
 
+A `Maintainability` or `Nit` finding from the code review checklists may name
+an input that no current caller passes as its Trigger. Start its Next step with
+`Optional:`. See Low-Severity Fixes in `code-review-checklists.md`.
+
 The Next step of every finding, design or code, must pass the **Fix Check** in
 the `system-design-review` skill: reuse the existing owner of each concept the
 fix decides, and do not let a same-class input skip an existing check. When it

@@ -86,6 +86,9 @@ starts, and record it in `target.md`:
 Also record in `target.md`:
 
 - the author's description, when the user gives one;
+- **Author:** whether the orchestrator wrote the change in this session. When
+  it did, its own review checks each assumption it made as author against the
+  parameter-contract table, rather than taking the assumption as given;
 - **Local build:** the build directories, the environment variables needed to
   import or run the built code, and whether the build includes the change
   (compare the build artifact time with the changed files). Use the
@@ -117,9 +120,13 @@ Each review has two parts:
    follow that engine but do not post to GitHub. Otherwise, check correctness,
    boundary and degraded paths, error handling, invariants across callers,
    and test coverage of the changed behavior.
+1. **Code review checklists:** run the three checklists in
+   `references/code-review-checklists.md` (parameter contracts, branches and
+   tests, assertion quality) whichever engine ran, and put their tables in
+   `## Coverage`.
 
 For each new public API, check empty, negative, duplicate, and wrong-typed
-arguments. When a local build exists, reproduce runtime claims with it, and run
+arguments; the parameter-contract table records the result. When a local build exists, reproduce runtime claims with it, and run
 each probe that may crash in its own process.
 
 Write every finding in the format of `references/finding-format.md`. Claude
@@ -135,7 +142,9 @@ missing, when:
 
 - it does not follow the finding format; or
 - its `## Coverage` section is missing, or shows that it skipped the design
-  review or the code-review engine without a reason such as a missing skill.
+  review or the code-review engine without a reason such as a missing skill;
+  or
+- its `## Coverage` section lacks any of the three checklist tables.
 
 If the rerun fails the same check, stop as for a peer failure.
 

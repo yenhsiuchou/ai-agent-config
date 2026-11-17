@@ -16,6 +16,8 @@ files, not only the diff.
    yourself in sequence. Without such an engine, check correctness, boundary
    and degraded paths, error handling, invariants across callers, and test
    coverage of the changed behavior.
+1. Code review checklists: run the three checklists in
+   `{{SKILL_DIR}}/references/code-review-checklists.md` whichever engine ran.
 
 **Rules:**
 
@@ -27,7 +29,9 @@ files, not only the diff.
   or tests. When `target.md` gives a local build, reproduce runtime claims with
   it. Run each probe that may crash in its own process.
 - Check boundary inputs of every new public API: empty, negative, duplicate,
-  and wrong-typed arguments.
+  and wrong-typed arguments. Record them in the parameter-contract table.
+- Do not drop a low-severity finding only because no current caller reaches
+  it; follow the Low-Severity Fixes rule in the checklists file.
 
 **Output:** your final message is the deliverable. Write it in English with
 these sections in order:
@@ -38,6 +42,7 @@ these sections in order:
 1. `## Code findings`
 1. `## Coverage`: the skills and engine you followed, each specialist or check
    you ran (or skipped, with the reason), the files you read in full, and every
-   command you ran with its result.
+   command you ran with its result. Then the three checklist tables:
+   parameter contracts, branches and tests, assertion quality.
 
 Do not write files.
