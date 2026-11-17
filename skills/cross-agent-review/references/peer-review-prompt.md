@@ -26,12 +26,19 @@ files, not only the diff.
   `{{SKILL_DIR}}/references/finding-format.md`. Use IDs `{{PREFIX}}-1`,
   `{{PREFIX}}-2`, ….
 - Report only findings you can support with evidence from the real code, IR,
-  or tests. When `target.md` gives a local build, reproduce runtime claims with
-  it. Run each probe that may crash in its own process.
+  or tests.
+- Give each finding its **Reached** evidence, as the finding format defines.
+  You run read-only and cannot build a new probe. So trace the path and read
+  each validity layer in front of the code (checklist 4): the parser, the op's
+  own verifier, the verifier of every enclosing op, verification between
+  passes, and the analyses the caller runs first. List each layer you read as
+  `read`; write `not built` when you did not read them all. The orchestrator
+  builds your triggers before round 1. Existing tests in the local build in
+  `target.md` may be run; run each in its own process if it may crash.
 - Check boundary inputs of every new public API: empty, negative, duplicate,
   and wrong-typed arguments. Record them in the parameter-contract table.
 - Do not drop a low-severity finding only because no current caller reaches
-  it; follow the Low-Severity Fixes rule in the checklists file.
+  it; report it with Reached `hypothetical`, as the finding format says.
 
 **Output:** your final message is the deliverable. Write it in English with
 these sections in order:
@@ -44,7 +51,6 @@ these sections in order:
    you ran (or skipped, with the reason), the files you read in full, and every
    command you ran with its result. Then the five checklist results:
    parameter contracts with doc comments and diagnostics, branches and tests,
-   assertion quality, dropped relations and upstream guarantees, and
-   structure.
+   assertion quality, reachability, and structure.
 
 Do not write files.

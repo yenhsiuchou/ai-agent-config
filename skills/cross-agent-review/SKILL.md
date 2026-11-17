@@ -7,14 +7,22 @@ description: Run a design review and a code review of one PR, commit, range, bra
 
 Two agents review the same change independently. Then each agent reads the
 other's findings and answers them, for at most three rounds. The result keeps
-only findings that both agents accept and lists every remaining disagreement
-with both arguments.
+only findings that both agents accept and whose triggers were shown to reach
+the code, and lists every remaining disagreement with both arguments.
+
+Agreement alone does not make a finding real. Two agents can accept the same
+wrong premise, such as an input that the IR verifier rejects. So every finding
+states how its trigger was shown to exist (**Reached** in
+`references/finding-format.md`), and the orchestrator builds the triggers the
+peer cannot.
 
 ## Roles
 
 - **Orchestrator:** the agent that runs this skill. It resolves the target,
-  writes its own review, runs the peer, and updates the ledger.
-- **Peer:** the other agent, started as a non-interactive CLI process.
+  writes its own review, runs the peer, builds probes, and updates the ledger.
+- **Peer:** the other agent, started as a non-interactive CLI process. It runs
+  read-only, so it cannot build a new probe; its triggers are `read` or
+  `not built` until the orchestrator checks them.
 
 | Orchestrator | Peer command |
 | ------------ | ------------ |
@@ -95,6 +103,11 @@ Also record in `target.md`:
   repository's documented test environment, such as the variables that the
   project `AGENTS.md` lists for its tests. Write `none` when no usable build
   exists.
+- **Probes:** how the orchestrator builds and runs a probe, such as a
+  temporary test in the repository's unit-test binary. When the build tree
+  does not match the target's base, record a way to build against matching
+  sources, such as a temporary branch whose changed files equal the target's,
+  and restore the tree after each probe.
 
 For a SHA target that is not the current checkout, add a detached worktree
 under the run directory (`git worktree add --detach <run>/tree <sha>`) and run
@@ -122,13 +135,19 @@ Each review has two parts:
    and test coverage of the changed behavior.
 1. **Code review checklists:** run the five checklists in
    `references/code-review-checklists.md` (parameter contracts with doc
-   comments and diagnostics, branches and tests, assertion quality, dropped
-   relations and upstream guarantees, structure) whichever engine ran, and put
-   their tables in `## Coverage`.
+   comments and diagnostics, branches and tests, assertion quality,
+   reachability, structure) whichever engine ran, and put their tables in
+   `## Coverage`.
 
 For each new public API, check empty, negative, duplicate, and wrong-typed
-arguments; the parameter-contract table records the result. When a local build exists, reproduce runtime claims with it, and run
-each probe that may crash in its own process.
+arguments; the parameter-contract table records the result.
+
+Give every finding its Reached evidence, and every claim that an input does or
+does not reach the code a row in checklist 4. When a probe can be built, build
+it: a trigger of yours is `built` before you report it as `Bug`. Build each
+probe through the parser, so the validity layers run. Run each probe that may
+crash in its own process, and do not change the reviewed tree while the peer
+reads it.
 
 Write every finding in the format of `references/finding-format.md`. Claude
 uses IDs `CL-1`, `CL-2`, …; Codex uses `CX-1`, `CX-2`, …. Use the section
@@ -149,14 +168,24 @@ missing, when:
 
 If the rerun fails the same check, stop as for a peer failure.
 
+A peer finding whose Reached is `read` or `not built` is not a format failure;
+Step 3 checks it.
+
 ## Step 3: Build the Ledger
 
 Write `ledger.md` with one row per finding from both reviews:
 
-| ID | Kind | Current title | Raised by | Claude | Codex | Status |
-| -- | ---- | ------------- | --------- | ------ | ----- | ------ |
+| ID | Kind | Current title | Raised by | Reached | Claude | Codex | Status |
+| -- | ---- | ------------- | --------- | ------- | ------ | ----- | ------ |
 
 - The raising agent's column starts as `raised`; the other column starts empty.
+- **Reach check.** Before round 1, the orchestrator tries to build the trigger
+  of every finding whose Reached is not `built` or `hypothetical`, the peer's
+  and its own, and records the result below the table: `built` with the probe
+  and its result; `rejected by <layer>` with the layer's reason; or
+  `cannot build` with why. Update the Reached column from it. A trigger that a
+  layer rejects is evidence against the finding; the raising agent answers it
+  in round 1.
 - Below the table, keep the **current text** of every finding that has been
   revised, copied from the answer file that revised it. Rows without a
   revision use their round-0 text.
@@ -181,16 +210,20 @@ revision from the orchestrator reaches the peer in the next round.
 | -------------------- | --------------------------------------------------------- |
 | `agree`              | The finding is valid as currently written.                |
 | `disagree`           | The finding is wrong; give code, IR, or test evidence.    |
-| `revise: <change>`   | Valid after a change to category, wording, or Next step.  |
+| `revise: <change>`   | Valid after a change to category, Reached, wording, or Next step. |
 | `withdraw`           | Only for one's own finding: it is wrong.                  |
 | `duplicate-of: <ID>` | Same root cause as another row; keep the clearer one.      |
 | `keep`               | Only for one's own finding: no change from its last text. |
 
 An answer that disputes a finding must cite evidence, such as a file and line,
 an IR snippet, or a test command and its output. An answer without evidence
-counts as `agree`. An answer that says an input cannot reach the code must
-give both columns of checklist 4, the enforcing line and a probe rejected with
-that rule's reason; otherwise it counts as `agree`.
+counts as `agree`.
+
+Whether an input reaches the code takes the same evidence in both directions,
+as checklist 4 sets out. An answer that says an input does not reach the code
+names the rejecting layer and gives a probe that this layer rejects; without
+both it counts as `agree`. An `agree` with a finding whose Reached is `read` or
+`not built` means you checked its layers yourself; say which ones.
 
 Each answer covers the Next step too. If the Next step fails the Fix Check of
 `system-design-review`, answer `revise` with a Next step that passes,
@@ -202,6 +235,9 @@ After both answers, update each row from its current text:
   `agree`; or one agent's `revise` gets `agree` from the other in the same
   round (peer revision) or the next round (orchestrator revision); or both
   agents give the same `revise`. Use the accepted text.
+- **unverified:** a row that meets **accepted**, but whose Reached is below
+  what its category needs in `references/finding-format.md`, for example a
+  `Bug` that is `read` or `not built`. It needs a probe, not more agreement.
 - **dropped:** the raising agent answers `withdraw`, or both agents answer
   `disagree`.
 - **merged:** both agents mark the same `duplicate-of` target.
@@ -230,14 +266,17 @@ Write `final.md`, then show it to the user in their preferred language:
 1. **Consensus findings:** accepted findings, most severe first, design and
    code findings in separate lists. Start each finding with one plain sentence
    that ties it to the background, then use the format in
-   `references/finding-format.md`.
+   `references/finding-format.md`, including its Reached evidence.
+1. **Unverified findings:** for each row, the finding, why its trigger is not
+   built, and the probe that would settle it.
 1. **Unresolved disagreements:** for each row, the finding, the strongest
    argument from each agent with its evidence, and the check that would decide
    it.
 1. **Dropped findings:** one line each, with the reason.
 1. **Late findings:** listed separately, marked as reviewed by one agent only.
-1. **Process:** rounds used, peer reruns or failures, and coverage gaps from
-   either agent's `## Coverage`, such as tests that neither agent could run.
+1. **Process:** rounds used, peer reruns or failures, each probe the
+   orchestrator built with its result, and coverage gaps from either agent's
+   `## Coverage`, such as tests that neither agent could run.
 
 When the user asks for text for the author, use the `review-comment-drafting`
 skill with the accepted findings the user picks.

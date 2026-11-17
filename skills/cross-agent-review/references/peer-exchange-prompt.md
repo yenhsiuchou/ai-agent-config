@@ -6,8 +6,8 @@ round you answer first; the other agent answers after reading your answers.
 **Read:**
 
 - `{{RUN_DIR}}/target.md` for the target, working directory, and local build.
-- `{{RUN_DIR}}/ledger.md` for the status of every finding and the current
-  text of each revised finding.
+- `{{RUN_DIR}}/ledger.md` for the status of every finding, the current text
+  of each revised finding, and the orchestrator's reach check of each trigger.
 - `{{RUN_DIR}}/review-claude.md` and `{{RUN_DIR}}/review-codex.md` for the
   original findings.
 - Earlier answers: {{PREVIOUS_ROUND_FILES}}
@@ -21,7 +21,7 @@ the ledger.
 | -------------------- | --------------------------------------------------------- |
 | `agree`              | The finding is valid as currently written.                |
 | `disagree`           | The finding is wrong; give code, IR, or test evidence.    |
-| `revise: <change>`   | Valid after a change to category, wording, or Next step.  |
+| `revise: <change>`   | Valid after a change to category, Reached, wording, or Next step. |
 | `withdraw`           | Only for your own finding: it is wrong.                   |
 | `duplicate-of: <ID>` | Same root cause as another row; keep the clearer one.      |
 | `keep`               | Only for your own finding: no change from your last text. |
@@ -36,10 +36,16 @@ further change, answer `revise` with the full new text.
 - `disagree` and `revise` must cite evidence: file and line, an IR snippet, or
   a test command with its output. An answer without evidence counts as
   `agree`.
-- An answer that says an input cannot reach the code must give the enforcing
-  line on the live call path and a probe rejected with that rule's reason, as
-  checklist 4 in `{{SKILL_DIR}}/references/code-review-checklists.md` asks.
-  Otherwise it counts as `agree`.
+- Whether an input reaches the code takes the same evidence in both
+  directions, as checklist 4 in
+  `{{SKILL_DIR}}/references/code-review-checklists.md` sets out. An answer that
+  says an input does not reach the code names the rejecting layer and a probe
+  that this layer rejects; without both it counts as `agree`.
+- Before you `agree` with a finding whose Reached is `read` or `not built`,
+  check its validity layers yourself and name them in the evidence. When the
+  reach check in the ledger says a layer rejects the trigger, answer it: a
+  finding of yours whose trigger is rejected is `withdraw` or a `revise` with a
+  trigger that reaches the code.
 - Answer the Next step too. If it fails the Fix Check of the
   `system-design-review` skill (it defines an existing concept a second time, or lets a same-class input
   skip an existing check), answer `revise` with a Next step that passes, and
