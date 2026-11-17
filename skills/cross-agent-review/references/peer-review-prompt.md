@@ -16,7 +16,7 @@ files, not only the diff.
    yourself in sequence. Without such an engine, check correctness, boundary
    and degraded paths, error handling, invariants across callers, and test
    coverage of the changed behavior.
-1. Code review checklists: run the four checklists in
+1. Code review checklists: run the five checklists in
    `{{SKILL_DIR}}/references/code-review-checklists.md` whichever engine ran.
 
 **Rules:**
@@ -42,8 +42,9 @@ these sections in order:
 1. `## Code findings`
 1. `## Coverage`: the skills and engine you followed, each specialist or check
    you ran (or skipped, with the reason), the files you read in full, and every
-   command you ran with its result. Then the four checklist tables:
-   parameter contracts, branches and tests, assertion quality, dropped
-   relations and upstream guarantees.
+   command you ran with its result. Then the five checklist results:
+   parameter contracts with doc comments and diagnostics, branches and tests,
+   assertion quality, dropped relations and upstream guarantees, and
+   structure.
 
 Do not write files.

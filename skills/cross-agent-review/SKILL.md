@@ -120,10 +120,11 @@ Each review has two parts:
    follow that engine but do not post to GitHub. Otherwise, check correctness,
    boundary and degraded paths, error handling, invariants across callers,
    and test coverage of the changed behavior.
-1. **Code review checklists:** run the four checklists in
-   `references/code-review-checklists.md` (parameter contracts, branches and
-   tests, assertion quality, dropped relations and upstream guarantees)
-   whichever engine ran, and put their tables in `## Coverage`.
+1. **Code review checklists:** run the five checklists in
+   `references/code-review-checklists.md` (parameter contracts with doc
+   comments and diagnostics, branches and tests, assertion quality, dropped
+   relations and upstream guarantees, structure) whichever engine ran, and put
+   their tables in `## Coverage`.
 
 For each new public API, check empty, negative, duplicate, and wrong-typed
 arguments; the parameter-contract table records the result. When a local build exists, reproduce runtime claims with it, and run
@@ -144,7 +145,7 @@ missing, when:
 - its `## Coverage` section is missing, or shows that it skipped the design
   review or the code-review engine without a reason such as a missing skill;
   or
-- its `## Coverage` section lacks any of the four checklist tables.
+- its `## Coverage` section lacks any of the five checklist results.
 
 If the rerun fails the same check, stop as for a peer failure.
 
