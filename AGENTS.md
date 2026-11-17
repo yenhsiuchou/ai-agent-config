@@ -72,6 +72,8 @@ it is more specific or stricter.
 - When the user asks for a review by both Claude and Codex, or for a
   cross-agent or consensus review, use `cross-agent-review`. It runs both the
   design review and the code review in each agent.
+- To analyze or address reviewer comments on the user's own PR, use
+  `verify-reviewer-comments`.
 - To draft or post review comments on another author's PR, use
   `review-comment-drafting`, whichever review produced the findings. It
   replaces the posting step of a project review skill, such as `review-pr`,

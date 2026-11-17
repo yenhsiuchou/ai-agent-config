@@ -9,8 +9,8 @@ A review comment asks the author one question about one place in the diff. The
 author should understand it without reading our review notes, and decide the
 fix themselves.
 
-This skill covers comments on another author's PR. For replies on the user's
-own PR, follow the `pr` skill or `reader-first-writing` instead.
+This skill covers comments on another author's PR. For reviewer comments on the
+user's own PR, use `verify-reviewer-comments`.
 
 ## Step 1: Pick the Findings
 
