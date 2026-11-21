@@ -21,7 +21,8 @@ peer cannot.
 - **Orchestrator:** the agent that runs this skill. It resolves the target,
   writes its own review, runs the peer, builds probes, and updates the ledger.
 - **Peer:** the other agent, started as a non-interactive CLI process. It runs
-  read-only, so it cannot build a new probe; its triggers are `read` or
+  read-only: it can run the built tools on existing files or on stdin, but it
+  cannot write a probe file or rebuild. Its other triggers are `read` or
   `not built` until the orchestrator checks them.
 
 | Orchestrator | Peer command |
@@ -127,7 +128,9 @@ two reviews must be independent.
 
 Each review has two parts:
 
-1. **Design review:** follow the `system-design-review` skill.
+1. **Design review:** follow the `system-design-review` skill, then run the
+   five checklists in `references/design-review-checklist.md` and put their
+   tables in `## Coverage`.
 1. **Code review:** when the repository has
    `.agents/skills/review-diff/SKILL.md` (or `review-pr` for a PR target),
    follow that engine but do not post to GitHub. Otherwise, check correctness,
@@ -164,7 +167,10 @@ missing, when:
 - its `## Coverage` section is missing, or shows that it skipped the design
   review or the code-review engine without a reason such as a missing skill;
   or
-- its `## Coverage` section lacks any of the five checklist results.
+- its `## Coverage` section lacks any of the five design checklist tables or
+  the five code checklist results; or
+- it reports no design finding and has no `## Design candidates not reported`
+  list.
 
 If the rerun fails the same check, stop as for a peer failure.
 

@@ -46,7 +46,15 @@ wrong: a fix for it adds dead code.
 | `Maintainability`, `Nit`, `Design question`, `Optional trade-off` | any |
 
 A finding whose Reached is `not built` keeps its category until the
-orchestrator checks it (SKILL.md, Step 3). A finding whose Reached is
+orchestrator checks it (SKILL.md, Step 3).
+
+A suspected design problem whose trigger you could not build is a
+`Design question` with Reached `not built`. It needs a location, the suspected
+trigger, and the caller trace that leads to it; its Next step is the probe that
+settles it. Report it rather than drop it for lack of a probe: the orchestrator
+builds the probe before round 1.
+
+A finding whose Reached is
 `hypothetical` starts its Next step with `Optional:`. Report such a finding
 when the fix is local and cheap, such as an assert of a caller precondition, a
 stronger assertion, or a sentence in a doc comment; do not drop it only because
