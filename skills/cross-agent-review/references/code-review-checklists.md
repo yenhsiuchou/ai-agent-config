@@ -68,6 +68,10 @@ One row per branch in the changed code: each `if`/`else`, early `return`,
   fail on a wrong result. A `none` is a `Missing test` when an input reaches the
   branch (Reached `built` or `read`). When you think no input can reach it, add
   a checklist 4 row; an unreachable branch is dead code, not a missing test.
+- **A surviving mutant has two readings.** When removing a check passes every
+  test, the check either lacks a test or guards an input no caller produces.
+  Decide with a checklist 4 row traced from the callers before you ask for a
+  test.
 - Short branches count. A branch of one line that removes an attribute or
   returns early needs a row like any other.
 - **Helper branches per call site:** when a helper has a branch, such as one
@@ -134,7 +138,7 @@ only, or a check of each dim alone without the relations between dims.
 
 One row per claim that an input reaches, or does not reach, the code. Claims
 come from findings, from the code or its comments, from the author's
-description, from your own reasoning, and from the two sources below.
+description, from your own reasoning, and from the sources below.
 
 | Claim | Direction | Layers on the path (file:line) | Probe and its result | Verdict |
 | ----- | --------- | ------------------------------ | -------------------- | ------- |
@@ -151,8 +155,21 @@ description, from your own reasoning, and from the two sources below.
   a failure reason with a test, not an assert. An assert on an input that
   reaches is a `Bug`, because a debug build crashes and a release build
   produces wrong output.
+- **Closing an `open` row:** only evidence closes it. A policy comment that the
+  change itself writes, such as "these functions report a failure on a
+  malformed plan", is a claim, not a layer.
 
 ### Sources of Claims
+
+**Defensive checks.** Each check of a new API that rejects a malformed input,
+such as an out-of-range index, a cycle, or an out-of-order list, claims that
+some caller produces that input. Trace every caller from where the input is
+created, including later PRs of the stack. When the input comes only from a
+producer that guarantees the property, that producer is the rejecting layer;
+the probe runs the producer on many inputs, such as random ones, and checks its
+output against the property. With that evidence, report a `Design question`
+that asks whether a precondition with an assert fits, and do not ask for tests
+of the check. Without it, the row stays `open` and the check stays a failure.
 
 **Dropped relations.** A rewrite that rebuilds output from parts of its input,
 such as one loop per dim, one value per slot, or one op per element, keeps only
