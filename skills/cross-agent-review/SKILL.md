@@ -58,6 +58,18 @@ ${TMPDIR:-/tmp}/cross-agent-review/<target-slug>-<UTC yyyymmdd-HHMMSS>/
 Use the scratchpad directory instead of `$TMPDIR` when the harness provides
 one. Pass the absolute run-directory path to the peer.
 
+The run directory is temporary; the system may clean it within days. Step 5
+copies the review record to the archive, which a later follow-up review
+reads:
+
+```
+${CROSS_AGENT_REVIEW_ARCHIVE:-~/WorkSpace/Notes/reviews}/<repo>/<key>/<UTC yyyymmdd-HHMM>-<head 8 chars>/
+```
+
+- `<repo>`: the base name of the repository's top-level directory.
+- `<key>`: `pr<n>` for a PR; otherwise the branch name with each `/` replaced
+  by `-`, such as `yenhsiuchou-fix-noc`.
+
 ## Rendering Peer Prompts
 
 The prompt templates in `references/` use `{{KEY}}` placeholders. Render them
@@ -109,6 +121,33 @@ Also record in `target.md`:
   does not match the target's base, record a way to build against matching
   sources, such as a temporary branch whose changed files equal the target's,
   and restore the tree after each probe.
+
+### Mode: First, Follow-Up, or Full
+
+Decide the mode, and record it with its reason in `target.md` as `Mode:`:
+
+1. When the user asks for a full review, the mode is `full`.
+1. Otherwise, find the earlier run of the same target: the run this session
+   already made, or the newest entry under `<archive>/<repo>/<key>/`. With
+   none, the mode is `first`.
+1. With an earlier run, compute the delta from its reviewed range
+   (`<earlier base>..<earlier head>`) to the new one, and save it to
+   `delta.patch`:
+   - The earlier head is an ancestor of the new head
+     (`git merge-base --is-ancestor`) and no merge commit lies between them:
+     `git diff <earlier head> <new head>`.
+   - Otherwise, for a merge of `main` or a rebase:
+     `git range-diff <earlier base>..<earlier head> <new base>..<new head>`.
+   - When `range-diff` cannot match the commits, the mode is `full`, and the
+     review still runs the fix verification below.
+1. The mode is `follow-up`. Both agents follow
+   `references/follow-up-review.md`. Copy into `target.md` the earlier run's
+   directory and range, the path of `delta.patch`, and every earlier finding
+   whose status was `accepted`, `unverified`, `unresolved`, or `dropped`, with
+   its current text, status, and probe paths.
+
+Say the mode and its reason to the user when the run starts, so they can ask
+for another one.
 
 For a SHA target that is not the current checkout, add a detached worktree
 under the run directory (`git worktree add --detach <run>/tree <sha>`) and run
@@ -164,6 +203,8 @@ Check the peer's output before you use it. Rerun the peer once, naming what is
 missing, when:
 
 - it does not follow the finding format; or
+- in follow-up mode, its `## Fix verification` table lacks a row for an
+  earlier finding; or
 - its `## Coverage` section is missing, or shows that it skipped the design
   review or the code-review engine without a reason such as a missing skill;
   or
@@ -266,7 +307,11 @@ round.
 
 Write `final.md`, then show it to the user in their preferred language:
 
-1. **Target:** the reviewed SHA range and the run directory.
+1. **Target:** the reviewed SHA range, the run directory, and the mode with
+   its reason.
+1. **Fix verification** (follow-up mode): one line per earlier finding with
+   both agents' verdicts. Say whether the review has converged, as
+   `references/follow-up-review.md` defines.
 1. **Background:** the Background defined in the Output section of
    `system-design-review`, written for the accepted findings.
 1. **Consensus findings:** accepted findings, most severe first, design and
@@ -286,6 +331,12 @@ Write `final.md`, then show it to the user in their preferred language:
 
 When the user asks for text for the author, use the `review-comment-drafting`
 skill with the accepted findings the user picks.
+
+Then archive the run at the path in **Run Directory**: copy `target.md`,
+`ledger.md`, `final.md`, every `review-*.md` and `round-*.md`, and the probe
+sources from `probes/` (inputs such as `.mlir`, `.cpp`, `.py`, `.sh`, each under
+50 KB). Do not copy builds, worktrees, logs, patches, or probe outputs. Give
+the archive path in the report.
 
 Do not post anything to GitHub. If the user asks to post, follow
 `review-comment-drafting`.

@@ -6,7 +6,10 @@ directory, the diff file `{{RUN_DIR}}/target.patch`, the author's description
 when there is one, and how to build or run code locally. Read full changed
 files, not only the diff.
 
-**Task:** write a design review and a code review.
+**Task:** write a design review and a code review. When `target.md` says
+`Mode: follow-up`, also follow
+`{{SKILL_DIR}}/references/follow-up-review.md`: it sets the scope of each part
+below and adds a fix verification.
 
 1. Design review: follow the `system-design-review` skill, then run the five
    checklists in `{{SKILL_DIR}}/references/design-review-checklist.md`.
@@ -53,6 +56,7 @@ these sections in order:
 
 1. A two-sentence summary of the change, in place of the Background that
    `system-design-review` asks for.
+1. `## Fix verification`, in follow-up mode only.
 1. `## Design findings`
 1. `## Design candidates not reported`, as the design checklist defines.
 1. `## Code findings`
