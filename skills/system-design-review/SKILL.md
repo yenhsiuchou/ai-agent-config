@@ -70,6 +70,39 @@ runtime, compile-time, memory, maintenance, test, debugging, coupling, and
 foreclosed-option costs that the available evidence supports. A more specialized
 implementation is valid when its evidence and ownership are clear.
 
+## Question Necessity
+
+A review that only checks whether the change does what it says will never ask
+whether it needs to. For each element the change adds — a second path such as a
+fast path, special case, or fallback; a validation or failure path; a new
+concept, field, or flag — fill one row:
+
+| New element | What needs it (caller or input source, file:line) | Owner of the guarantee it checks or adds | What breaks without it | Verdict |
+| ----------- | ------------------------------------------------- | ---------------------------------------- | ---------------------- | ------- |
+
+- **Read from the source.** Trace each caller from where its input is created
+  to the call, including later PRs of the same stack. The lines around the
+  call are not enough: a rebuild or a normalization earlier in the caller can
+  already guarantee what the new element checks.
+- **Empty "what breaks".** When the column holds no concrete input, the element
+  re-checks a guarantee an upstream owner already holds, or serves an input no
+  caller produces. Report a **Design question** with the caller trace, and offer
+  the smaller alternative: reuse the owner, state a precondition with an
+  assert, or remove the element.
+- **Validate at the boundary, assume inside it.** A function whose input comes
+  from IR or from other components reports a failure on bad input. A helper
+  whose input comes only from the owner of an invariant asserts that invariant.
+  Decide which one a function is from its producers, not from a policy comment
+  the change itself writes; the change's own design rules are claims to check,
+  not evidence.
+- **A second path for performance.** Ask for a measurement at the stage where
+  the cost is paid, and check whether the inputs it receives differ from those
+  of the main path. When it gives the same output as the main path on every
+  input a caller produces, its only value is speed; say so with the numbers.
+- **Cost of asking.** A necessity question is cheapest on a design document or
+  the first PR of a stack. Late in a stack, raise one that removes code; one
+  that adds code needs stronger evidence.
+
 ## Audit Terminology and Semantic Contracts
 
 When a diff changes the scope, implementation, documentation, or use of a
