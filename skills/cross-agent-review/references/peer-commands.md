@@ -10,14 +10,23 @@ timeout.
 ## Claude Code orchestrator → Codex peer
 
 ```bash
-codex exec -C <workdir> -s read-only \
-  -o <run-dir>/<output>.md - < <run-dir>/prompt-<step>.md \
-  > <run-dir>/<output>.log 2>&1
+python3 <cross-agent-review-dir>/scripts/run_codex.py \
+  --prompt <run-dir>/prompt-<step>.md --output <run-dir>/<output>.md \
+  --log <run-dir>/<output>.log -- \
+  -C <workdir> -s read-only --add-dir <run-dir> [-c model_reasoning_effort=<level>]
 ```
 
+- The script runs `codex exec <arguments> -o <output> -` with the prompt on
+  stdin. `-o` saves Codex's final message, which is the deliverable.
+- **Stall watchdog.** `codex exec` writes the log after each command and model
+  response. When the log does not grow for 8 minutes, the script kills the
+  call with its child processes and starts it again once. A normal gap is
+  under 2 minutes; one stalled request has taken 20. Exit status 124 means
+  every attempt stalled: report it as a peer failure.
 - `-s read-only` lets Codex read files and run read-only commands such as
   `git diff`; it cannot edit the tree.
-- `-o` saves Codex's final message, which is the deliverable.
+- `-c model_reasoning_effort=<level>` overrides the effort in
+  `~/.codex/config.toml` for one call, when the calling skill asks for it.
 - Codex loads the shared skills from `~/.codex/skills` and the repository's
   `.agents/skills`.
 
