@@ -60,4 +60,7 @@ merge_claude_hook_settings() {
 
 merge_claude_hook_settings
 
+# Commits and pushes from this clone run scripts/check-public-content.py.
+git -C "$repository_dir" config core.hooksPath githooks
+
 echo "Installed shared agent configuration from $repository_dir"

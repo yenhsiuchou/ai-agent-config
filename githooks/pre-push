@@ -1,0 +1,4 @@
+#!/bin/sh
+# Rejects a push whose commits carry private or employer content in added
+# lines, messages, or author and committer emails.
+exec python3 "$(git rev-parse --show-toplevel)/scripts/check-public-content.py" --push

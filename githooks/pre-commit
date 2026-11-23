@@ -1,0 +1,3 @@
+#!/bin/sh
+# Rejects a commit whose added lines carry private or employer content.
+exec python3 "$(git rev-parse --show-toplevel)/scripts/check-public-content.py" --staged
