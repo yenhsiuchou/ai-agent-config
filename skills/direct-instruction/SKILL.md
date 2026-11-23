@@ -86,10 +86,9 @@ Check `## Next Action`, then say in one sentence what happens next.
 Ch00 gives the learner a map before details: components, their connections, and
 why the design follows from constraints.
 
-- Use mostly diagrams, normally three to six. A diagram expresses one
-  information axis.
-- Separate **structure** (connections), **time** (ordering), and **space**
-  (layout or range). Split diagrams that need artificial edges to combine them.
+- Use mostly diagrams, normally three to six, drawn with the
+  `markdown-diagrams` skill. Separate **structure** (connections), **time**
+  (ordering), and **space** (layout or range) into different diagrams.
 - Reuse one minimal, complete example throughout the map.
 - Open with `## What This Chapter Does`, as every chapter does. Follow it with
   a table mapping sections to the chapters that explain them, then the recap.
@@ -200,7 +199,9 @@ After a concept passes natural evidence or diagnostics:
 
 1. update its status and `## Next Action` in `[slug]_session.md`;
 2. add a concise `## Verification Summary` entry;
-3. regenerate the session DOT graph with status colors;
+3. regenerate the session DOT graph with the role colors of
+   `markdown-diagrams`: `understood` and `can_apply` New, `material_ready` and
+   `partial` Decision, `missed` Error, `not_exposed` Context;
 4. append the evidence or diagnostic exchange to `[slug]_qa.md`;
 5. add a distilled concept note to `[slug]_notes.md`;
 6. update the material index; and
@@ -229,17 +230,13 @@ must be rewritten before the learner reads it.
   the few code lines that implement it → a table of worked cases →
   boundaries as bullets.
 - **Descriptive headings.** In every chapter, including Ch00, title each
-  section and figure by what it shows (for example, "Writes To One Element:
-  Same Order Before And After"), never "Fig N". Cross-references use the title.
-- **Explain with index expressions.** For an access or layout, give a table of
-  result dim → expression → which loop it pins, then draw the iteration grid
-  with the element each cell touches. Keep prose to the sentence each figure
-  needs.
+  section by what it shows. Title figures as `markdown-diagrams` says.
+- **Explain with index expressions,** drawn as `markdown-diagrams` says. Keep
+  prose to the sentence each figure needs.
 - **Real IR only**, trimmed, produced by the actual binary.
 - **Interactive explorer** when the concept is "change a choice, watch the
-  outcome" (loop order, cut choice, packet flow). Embed it inline in the
-  Markdown, and read `references/interactive-explorer.md` before building
-  one.
+  outcome" (loop order, cut choice, packet flow), built as
+  `markdown-diagrams` says.
 
 Use this chapter shape when it fits:
 
@@ -261,20 +258,8 @@ Use this chapter shape when it fits:
 ## References
 ````
 
-Choose diagrams by information axis:
-
-| Axis | Preferred format |
-|---|---|
-| Structure: components and links | Graphviz DOT |
-| Time: ordering, overlap, state change | Mermaid sequence, gantt, or state diagram |
-| Space: linear or grid arrangement | ASCII section diagram |
-| Precise geometry | Embedded SVG |
-
-Use DOT for flow layout, tables for comparison and responsibility, and ASCII
-for large grids. For DOT, use `bgcolor=transparent`, `shape=box`,
-`style="rounded,filled"`, and `fontname="Helvetica"`. Use `rankdir=TB` for a
-process and `LR` for an interface. Keep labels ASCII English and explain each
-diagram directly below it.
+Draw every diagram with the `markdown-diagrams` skill, and run its DOT check
+before giving the material to the learner.
 
 ## End A Session
 

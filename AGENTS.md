@@ -48,6 +48,8 @@ it is more specific or stricter.
 - For a PR description, design document, new pass, or large diff, run the
   `reader-first-writing` cold-reader check when independent reviewer tooling is
   available.
+- Before drawing a diagram in a Markdown file, use the `markdown-diagrams`
+  skill. A chat reply has no diagram block; use a table or arrow text.
 
 ## Personal Skill Ownership
 
