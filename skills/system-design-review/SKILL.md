@@ -1,12 +1,13 @@
 ---
 name: system-design-review
-description: Perform an evidenced design or architecture review of a PR, diff, or code change. Use when the user says design review, even with a PR number; do not replace it with routine review-pr unless that review is also explicitly requested.
+description: Perform an evidenced design or architecture review of a PR, diff, code change, or design document. Use when the user says design review, even with a PR number; do not replace it with routine review-pr unless that review is also explicitly requested.
 ---
 
 # System Design Review
 
 Use this skill when the user asks for a design review or architecture review of
-a PR, commit, range, branch, or working-tree diff. A PR number or URL names
+a PR, commit, range, branch, or working-tree diff, or of a design document
+(see **Target: A Design Document**). A PR number or URL names
 the target; it does not request routine `review-pr`. This skill is useful when
 a change adds a compiler pass, IR
 contract, cross-layer interface, runtime policy, representation change, or
@@ -200,6 +201,39 @@ review engine:
 
 When a fix cannot pass this check, give the check that settles the question
 instead of a fix.
+
+## Target: A Design Document
+
+A design document proposes a change that does not exist yet. Review it with
+the same rules, read against the current code instead of a diff:
+
+- **Facts against code.** Record each factual claim of the document in the
+  Facts ledger: what a pass does today, which inputs reach a path, what an IR
+  example shows. Find its evidence: a file:line, a test, or IR from a command
+  you ran. A claim the code contradicts is a `Confirmed defect`; a claim with
+  no evidence is an Assumption, and a design decision that rests on it is a
+  `Design question`.
+- **Necessity.** Fill the necessity table for every pass, concept, field,
+  check, or fallback the document adds. Read each caller from where its input
+  is created in the current code. This is the cheapest time to ask.
+- **Ownership.** Build the ownership timeline for each proposed decision:
+  does it run after its facts exist, at the component that owns the result?
+- **Paths.** Check that the document covers the normal, degraded, and
+  boundary paths, and says what happens on each: an error, a fallback, or a
+  skip, consistent with other handlers of the same input class.
+- **Alternatives.** Compare the proposal with the alternatives that the
+  project goal and the existing owners support, including the smaller one:
+  reuse an owner, or do nothing.
+- **Change split.** When the document splits the work into PRs or steps,
+  check that each one can be reviewed, verified, and reverted alone, and that
+  no step leaves the pipeline in a state the document does not acknowledge.
+- **Terms and figures.** Each term is defined once and used with one meaning.
+  Each diagram and IR example agrees with the text next to it.
+
+The Fix Check applies to the document's own proposal as it does to a finding's
+Next step. Report findings in the format the calling skill gives; without one,
+use the Output section below, with the document section and a quote as the
+location.
 
 ## Output
 
