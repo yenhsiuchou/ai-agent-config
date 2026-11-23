@@ -74,6 +74,9 @@ it is more specific or stricter.
 - When the user asks for a review by both Claude and Codex, or for a
   cross-agent or consensus review, use `cross-agent-review`. It runs both the
   design review and the code review in each agent.
+- When the user asks to write a design document that Claude and Codex review,
+  or for a review of a design document by both agents, use
+  `cross-agent-design-doc`. A PR or a diff still uses `cross-agent-review`.
 - To analyze or address reviewer comments on the user's own PR, use
   `verify-reviewer-comments`.
 - To draft or post review comments on another author's PR, use
