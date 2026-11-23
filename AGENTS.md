@@ -42,12 +42,16 @@ it is more specific or stricter.
 - Start explanations with a simple intuition, then introduce technical detail.
 - Keep code comments about the code's behavior or design constraint. Put
   reasoning history and before/after discussion in commits or reviews.
-- Before writing text for other readers—PR descriptions, design documents,
-  review replies, commit messages, code comments, diagnostics, names, or test
-  text—use the `reader-first-writing` skill.
-- For a PR description, design document, new pass, or large diff, run the
-  `reader-first-writing` cold-reader check when independent reviewer tooling is
-  available.
+- When the user asks to write a design document (design doc, 設計文件,
+  design 文件), use the `cross-agent-design-doc` skill and run its full review.
+  Use `reader-first-writing` for a design document only when the user asks for
+  an English version for a repository.
+- Before writing other text for other readers—PR descriptions, review
+  replies, commit messages, code comments, diagnostics, names, or test text—use
+  the `reader-first-writing` skill.
+- For a PR description, an English design document, a new pass, or a large
+  diff, run the `reader-first-writing` cold-reader check when independent
+  reviewer tooling is available.
 - Before drawing a diagram in a Markdown file, use the `markdown-diagrams`
   skill. A chat reply has no diagram block; use a table or arrow text.
 
@@ -74,8 +78,7 @@ it is more specific or stricter.
 - When the user asks for a review by both Claude and Codex, or for a
   cross-agent or consensus review, use `cross-agent-review`. It runs both the
   design review and the code review in each agent.
-- When the user asks to write a design document that Claude and Codex review,
-  or for a review of a design document by both agents, use
+- When the user asks for a review of a design document by both agents, use
   `cross-agent-design-doc`. A PR or a diff still uses `cross-agent-review`.
 - To analyze or address reviewer comments on the user's own PR, use
   `verify-reviewer-comments`.

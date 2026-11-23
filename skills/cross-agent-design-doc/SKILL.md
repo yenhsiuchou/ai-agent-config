@@ -1,6 +1,6 @@
 ---
 name: cross-agent-design-doc
-description: Write a design document for a problem, then have a fresh Claude reviewer and Codex design-review it, exchange findings for at most three rounds, apply the accepted findings, and let both reviewers read the result once more. Use when the user asks to write a design doc that Claude and Codex review, or asks for a cross-agent review of an existing design document; for a PR or a diff, use cross-agent-review.
+description: Write a design document for a problem, then have a fresh Claude reviewer and Codex design-review it, exchange findings for at most three rounds, apply the accepted findings, and let both reviewers read the result once more. Use whenever the user asks to write a design document (design doc, 設計文件, design 文件), even without mentioning a review, and when the user asks for a cross-agent review of an existing design document; for a PR or a diff, use cross-agent-review.
 ---
 
 # Cross-Agent Design Doc
