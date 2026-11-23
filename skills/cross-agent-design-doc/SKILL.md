@@ -27,8 +27,8 @@ user later wants an English version for a repository, write it with the
 | Role | Who | Does |
 | ---- | --- | ---- |
 | Author | The agent that runs this skill | Writes the document, runs the reviewers, keeps the ledger, edits the document. It writes no review and casts no vote. |
-| Reviewer CL | Claude, started fresh | Reviews read-only. IDs `CL-1`, `CL-2`, … |
-| Reviewer CX | Codex, started fresh | Reviews read-only. IDs `CX-1`, `CX-2`, … |
+| Reviewer CL | Claude, started fresh | Reviews without editing the document or the repository; writes probe files only under `<run-dir>/probes/reviewer-CL/`. IDs `CL-1`, `CL-2`, … |
+| Reviewer CX | Codex, started fresh | Reviews in a read-only sandbox; runs probes on existing files or on stdin. IDs `CX-1`, `CX-2`, … |
 
 Start each reviewer call fresh, with only the rendered prompt; a reviewer
 never sees the author's conversation.
@@ -40,7 +40,11 @@ never sees the author's conversation.
 
 - For `codex exec` and `claude -p`, use the commands and failure checks in
   `../cross-agent-review/references/peer-commands.md`, with `<workdir>` set to
-  the repository the document is about.
+  the repository the document is about. Its Codex command runs through the
+  stall watchdog `../cross-agent-review/scripts/run_codex.py`.
+- Run Codex at the effort set in `~/.codex/config.toml` for round 0 and the
+  final read. In exchange rounds, add `-c model_reasoning_effort=medium`:
+  an exchange answer checks claims that already carry evidence.
 - For the Agent tool, give the prompt
   `Read <run-dir>/prompt-<step>-claude.md and follow it. Your final message is the deliverable.`
   Save the agent's final message to the output file yourself.
@@ -50,6 +54,10 @@ never sees the author's conversation.
 If a reviewer fails, times out, or cannot start, stop and report the error.
 Ask whether to continue with one reviewer. Never write a review or an answer
 in a reviewer's place.
+
+A run takes tens of minutes. When the harness has a notification tool, such as
+`PushNotification` in Claude Code, send one line when the run finishes or
+stops to ask the user something.
 
 ## Run Directory
 
@@ -67,6 +75,7 @@ in a reviewer's place.
   final-codex.md
   prompt-*.md            # rendered prompts
   probes/                # probes the author built
+  probes/reviewer-CL/    # probes reviewer CL built
   ledger.md
   report.md
 ```
@@ -157,6 +166,10 @@ finding of both reviews:
   result, `rejected by <layer>`, or `cannot build` with why.
 - Below the table, keep the current text of every revised finding, copied
   from the answer file that revised it, with that file's name.
+- **Clarity rows skip the exchange.** Give every `Clarity` finding the status
+  `author`. The author applies it in Step 5, and the final read checks that it
+  landed. When two `Clarity` findings conflict, the author picks the one that
+  changes the meaning less and records why.
 
 The author copies reviewer text into the ledger and does not rewrite it.
 
@@ -169,13 +182,23 @@ Use the answers, the evidence rules, the status rules, the early stop, and the
 with CL and CX as its two agents. A reviewer raises no new finding in an
 exchange round; it lists one under `Late findings`.
 
+An exchange answer reuses the evidence already in the run: the ledger's reach
+check, the reviews, and the probe outputs under `probes/`. A reviewer reruns
+or builds a probe only to dispute a result or to check a claim that no
+existing result covers.
+
 ## Step 5: Apply the Findings
 
 Edit the document; keep each edit to what the finding's accepted Next step
-asks.
+asks. Rewrite the affected text in place: replace a wrong sentence, merge a
+missing case into the table or diagram it belongs to, and remove the text a
+fix makes redundant. Do not append a paragraph or a table cell to explain a
+fix. The review should not make the document longer than the findings
+require; record the size of `doc-r0.md` and `doc-r1.md` in the ledger.
 
 | Status | Action |
 | ------ | ------ |
+| `author` (`Clarity`) | Apply the finding's Next step. |
 | `accepted` | Apply the accepted text. For a `Design question` whose Next step is a check, run the check when you can and write its result into the document; otherwise move it to the open decisions. |
 | `accepted` `Optional trade-off` | Apply the option the accepted text recommends. Without a recommendation, move it to the open decisions. |
 | `unverified` | Build the probe the row names. Apply the finding when the probe confirms it; otherwise move it to the open decisions with the probe result. |
@@ -199,8 +222,16 @@ any substantive problem.
 1. Apply the wording points and fix every finding the final read marks
    `wrong` or `missing`. When the two reviewers' wording points conflict,
    choose the one that changes the meaning less.
-1. Do not start a fourth round. List each substantive problem from the final
-   read in the report, and let the user decide whether to run the skill again.
+1. Resolve every phrase that a cold read had to guess: define it in `名詞`,
+   replace it with the code name, or delete it. Split each sentence named as
+   the hardest to read.
+1. Do not start a fourth round. For each substantive problem from the final
+   read:
+   - When its Next step corrects text or evidence and leaves the design
+     unchanged, apply it, and mark it `final read 後修改，未經 review` in
+     `## Review 紀錄` and in the report.
+   - Otherwise, add it to `待決定` and list it in the report; the user decides
+     whether to run the skill again.
 1. Fill `## Review 紀錄` of the document: rounds used, counts per status,
    open decisions, and the archive path. Copy the document to `doc-final.md`.
 1. Archive the run to
@@ -212,7 +243,9 @@ any substantive problem.
    - the document path and its one-line conclusion;
    - what the review changed, one line per applied finding;
    - the open decisions;
-   - substantive problems from the final read, if any;
+   - substantive problems from the final read: those applied without review,
+     and those left to the user;
+   - the document size before and after the review;
    - rounds used, reviewer reruns or failures, probes built, and the archive
      path.
 

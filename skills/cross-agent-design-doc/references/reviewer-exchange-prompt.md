@@ -17,8 +17,15 @@ reading Codex's answers.
 
 Read these files directly. Do not rely on the ledger's summary alone.
 
+**Reuse the evidence in the run.** The reach check in the ledger, the two
+reviews, and the probe outputs under `{{RUN_DIR}}/probes/` already record
+which commands ran and what they printed. Rerun or build a probe only to
+dispute such a result, or to check a claim that no existing result covers.
+Read the code lines a claim cites; do not re-survey the code around them.
+
 **Task:** answer every row whose status is `open`, against its current text
-in the ledger.
+in the ledger. Rows with status `author` are `Clarity` findings the author
+applies directly; do not answer them.
 
 | Answer               | Meaning                                                   |
 | -------------------- | --------------------------------------------------------- |
@@ -51,7 +58,9 @@ further change, answer `revise` with the full new text.
   under `## Late findings`, in `{{SKILL_DIR}}/references/doc-finding-format.md`.
 - If the ledger misstates one of your earlier answers, add a line
   `ledger-error: <ID> — <correct answer>`.
-- Do not edit, commit, or push anything. Do not write files.
+- Do not edit the document or the repository, and do not commit or push.
+  Write a file only as a probe under `{{RUN_DIR}}/probes/reviewer-{{PREFIX}}/`
+  when your sandbox allows it; otherwise pass the IR on stdin.
 
 **Output:** your final message is the deliverable, in English. Use one block
 per open row:

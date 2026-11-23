@@ -25,16 +25,25 @@ not see its answer now.
    sentence to split, a diagram caption that disagrees with its diagram, a
    breach of `{{SKILL_DIR}}/references/doc-style.md`. Give each fix as
    replacement text.
+1. **Length.** Compare `doc-r1.md` with `doc-r0.md`. List the places where
+   the review added text without removing what it replaced, the table cells
+   longer than one clause, and the mechanisms in `設計` shown only as prose or
+   tables. For each, say what to cut, split, or draw.
 1. **Substantive problems.** Report a design problem only when the revision
    introduced it or the review missed it, with evidence from the code, in
    `{{SKILL_DIR}}/references/doc-finding-format.md` with IDs `{{PREFIX}}-F1`,
    `{{PREFIX}}-F2`, …. Do not re-raise a dropped or unresolved row.
 
-**Rules:** do not edit, commit, or push anything. Do not write files.
+**Rules:** do not edit the document or the repository, and do not commit or
+push. Write a file only as a probe under
+`{{RUN_DIR}}/probes/reviewer-{{PREFIX}}/` when your sandbox allows it;
+otherwise pass the IR on stdin. Reuse the probe outputs under
+`{{RUN_DIR}}/probes/` instead of rerunning them.
 
 **Output:** your final message is the deliverable, in English:
 
 1. `## Fix verification`: | ID | Section | Verdict | Note |
 1. `## Cold read`: the three answers.
 1. `## Wording`: | Section | Current text | Replacement |
+1. `## Length`: | Section | Problem | Cut, split, or draw |
 1. `## Substantive problems`: findings, or `None.`

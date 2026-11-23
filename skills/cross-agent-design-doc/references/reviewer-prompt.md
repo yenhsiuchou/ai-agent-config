@@ -19,7 +19,9 @@ evidence.
 
 **Rules:**
 
-- Do not edit, commit, or push anything. Do not write files.
+- Do not edit the document or the repository, and do not commit or push.
+  Write a file only as a probe under `{{RUN_DIR}}/probes/reviewer-{{PREFIX}}/`
+  when your sandbox allows it; otherwise pass the IR on stdin.
 - Write every finding in `{{SKILL_DIR}}/references/doc-finding-format.md`.
   Use IDs `{{PREFIX}}-1`, `{{PREFIX}}-2`, ….
 - Report only findings that evidence from the real code, IR, or tests

@@ -10,8 +10,16 @@ identifiers in English.
   at most two or three sentences say what to look at.
 - Draw every diagram with the `markdown-diagrams` skill: its formats, colors,
   and DOT check.
+- In `設計`, each mechanism (a rule, a flow, an ownership split, a data
+  layout) has a diagram. A table supports a diagram there; it does not
+  replace one.
 - A paragraph longer than three sentences becomes a table, a list, or a
   diagram.
+- A table cell holds one clause, about 40 Chinese characters. A cell that
+  needs more becomes more rows, a list below the table, or a diagram. Prose
+  moved into a cell is still prose.
+- Shorter is clearer. When a fix adds text, remove the text it makes
+  redundant.
 
 ## Recap First
 
@@ -50,8 +58,9 @@ Run before every review step:
 | ----- | --------- |
 | Conclusion | The first two lines state the problem and the answer |
 | Recap | Every concept that `問題` and `設計` use without explaining is in the recap or the terms table |
-| Diagrams | Every section of `問題` and `設計` has a diagram, table, or IR block; every diagram follows `markdown-diagrams` and passes its DOT check |
+| Diagrams | Every section of `問題` has a diagram, table, or IR block; every mechanism in `設計` has a diagram; every diagram follows `markdown-diagrams` and passes its DOT check |
 | Prose | No paragraph exceeds three sentences |
+| Cells | No table cell exceeds one clause |
 | Evidence | Every factual claim has a file:line, test, or command |
 | Terms | Every term in the terms table is used with that meaning only |
 | Paths | `設計` states the normal, degraded, and boundary paths |
