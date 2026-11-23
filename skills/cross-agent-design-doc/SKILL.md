@@ -196,6 +196,12 @@ fix makes redundant. Do not append a paragraph or a table cell to explain a
 fix. The review should not make the document longer than the findings
 require; record the size of `doc-r0.md` and `doc-r1.md` in the ledger.
 
+Shortening keeps every claim. When you cut or split a sentence or a table
+cell, the shorter text states the same claim with the same scope and the same
+evidence. For example, "no in-bounds access reaches the padding" is a narrower
+claim than "the verifier blocks every out-of-bound access", and only the first
+is true. Compare each shortened claim with its `doc-r0.md` text before Step 6.
+
 | Status | Action |
 | ------ | ------ |
 | `author` (`Clarity`) | Apply the finding's Next step. |
