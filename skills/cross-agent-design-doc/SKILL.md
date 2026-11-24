@@ -107,7 +107,8 @@ Write `target.md`:
 
 - **Problem:** what goes wrong or is missing, and for which stage or user.
 - **Constraints:** contracts, pipeline positions, and limits the design must
-  keep.
+  keep. List only real constraints: hardware, external contracts, and stated
+  global invariants. Existing code in this repository is not a constraint.
 - **Success condition:** what is true when the design is done.
 - **Scope:** what the document decides, and what it leaves out.
 - **Document:** the path. The default is
@@ -130,6 +131,11 @@ evidence.
 
 1. Read the code, tests, and design documents the problem touches. Run the
    pipeline on a real input to get the IR the document shows.
+1. Derive the design from the constraints in `target.md` first, as if the
+   existing code could all change. Then compare it with the current code and
+   fill `現狀落差`: one row per gap, each with one decision (fix first in a
+   prerequisite PR, isolate behind one boundary as debt, or keep with a
+   reason).
 1. Write the document by `references/doc-style.md` and
    `references/doc-template.md`.
 1. Give every factual claim its evidence in the text: a file:line, a test, or

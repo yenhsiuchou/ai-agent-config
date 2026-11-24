@@ -64,3 +64,4 @@ Run before every review step:
 | Evidence | Every factual claim has a file:line, test, or command |
 | Terms | Every term in the terms table is used with that meaning only |
 | Paths | `設計` states the normal, degraded, and boundary paths |
+| Gaps | Every place `設計` follows existing code instead of a real constraint has a row in `現狀落差` with one decision |

@@ -10,6 +10,14 @@ it is more specific or stricter.
 - Check each change against the whole design. Do not accept a locally correct
   change that breaks a global invariant or layering boundary.
 - Cover normal, degraded, and boundary paths before proposing a design.
+- Treat existing code as a choice that can change, not as a constraint.
+  Separate real constraints (hardware, external contracts, stated global
+  invariants) from behavior that exists only because earlier code was written
+  that way. Design from the real constraints first. For each gap between that
+  design and the current code, decide explicitly: fix the code first in a
+  prerequisite change, isolate the workaround behind one boundary and record
+  it as debt, or keep it with a stated reason. Never work around a flaw
+  silently.
 
 ## Implementation
 

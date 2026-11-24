@@ -27,6 +27,11 @@ of every known failing input: input / what happens / evidence>
 <the rule as a table or diagram; one diagram per mechanism; the normal,
 degraded, and boundary paths>
 
+## 現狀落差
+
+| 現狀（file:line） | 設計要的 | 決定：先修（prerequisite PR）／隔離在邊界並記成 debt／保留（理由） |
+|---|---|---|
+
 ## 這次不做
 
 <each item and why it can wait>

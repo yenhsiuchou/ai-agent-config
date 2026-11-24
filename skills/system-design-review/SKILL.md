@@ -104,6 +104,37 @@ concept, field, or flag — fill one row:
   the first PR of a stack. Late in a stack, raise one that removes code; one
   that adds code needs stronger evidence.
 
+## Separate Real Constraints From Incidental Code
+
+A change often bends its design around how existing code happens to work.
+Each bend is a design decision. When nobody states it, the next change treats
+the workaround as a constraint too, and the flaw spreads.
+
+List every place where the change shapes itself around existing code: an
+adapter, a conversion, a special case, a flag, a second representation, or a
+reason such as "because pass X currently does Y". Fill one row for each:
+
+| Bend | Existing behavior it follows (file:line) | Real or incidental | Decision the change states | Verdict |
+| ---- | ---------------------------------------- | ------------------ | -------------------------- | ------- |
+
+- **Real constraint:** hardware, an external contract (another repository, a
+  simulator, a file format), or a global invariant the project states. The
+  design must keep it.
+- **Incidental:** behavior that exists only because earlier code was written
+  that way. Show that it could change: its owner is in this repository, and
+  no real constraint requires it.
+- Each incidental bend needs one explicit decision: fix the existing code
+  first, in a prerequisite change; isolate the workaround behind one boundary
+  and record it as debt; or keep it with a stated reason.
+- **Silent bend:** an incidental bend with no stated decision. Report a
+  **Design question**. Give the design without the bend, the prerequisite
+  change that removes it, and that change's size. When the prerequisite is
+  large, isolating the bend is an accepted answer: the finding is about the
+  silence, not a demand to fix the old code now.
+- **Leaking bend:** a workaround the change says it isolates, but that new
+  logic outside the boundary also depends on. Report a **Design question**
+  that names each place it reaches.
+
 ## Audit Terminology and Semantic Contracts
 
 When a diff changes the scope, implementation, documentation, or use of a
@@ -216,6 +247,10 @@ the same rules, read against the current code instead of a diff:
 - **Necessity.** Fill the necessity table for every pass, concept, field,
   check, or fallback the document adds. Read each caller from where its input
   is created in the current code. This is the cheapest time to ask.
+- **Constraints.** Check that the document designs from real constraints
+  first, and that its list of gaps with the current code covers every
+  incidental bend, each with one decision (see **Separate Real Constraints
+  From Incidental Code**).
 - **Ownership.** Build the ownership timeline for each proposed decision:
   does it run after its facts exist, at the component that owns the result?
 - **Paths.** Check that the document covers the normal, degraded, and
