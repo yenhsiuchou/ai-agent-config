@@ -116,23 +116,30 @@ language:
    blocked, say by what, and stop unless the user says to go ahead. In a
    non-interactive run the user already chose to start it: continue, and list
    the blockers in the brief.
-1. Prepare the worktree and the branch the item needs: reuse the project's
-   `worktree` when the item continues that work; otherwise add a worktree
-   with a new branch from the base it needs. Never open a PR.
+1. Prepare the worktree and the branch the item needs. Never switch the
+   branch of an existing worktree: it may hold someone's uncommitted work.
+   When the project's `worktree` is already on the item's branch, reuse it.
+   Otherwise, from the repository workspace, run
+   `git worktree add -b <branch> <worktrees dir>/<branch slug> <base>`. When
+   the branch already exists, add the worktree without `-b`. Never open a PR.
 1. Write the brief at `briefs/<project-id>/<item-id>.md` under the projects
-   root:
-   - the scope, and what is out of scope;
-   - a link to the design document and the sections it implements, by
-     heading;
+   root. The PR session reads the design document itself, so the brief
+   points into it and does not copy it; keep the brief under about 80 lines:
+   - the scope in a few lines, and what is out of scope;
+   - the design document and the headings of the sections the item
+     implements, including its PR's test list; do not copy their text;
    - the status of each dependency and what the item may assume from it;
-   - the design principles the change must keep (`system-design-review`,
-     `references/design-principles.md`);
-   - the worktree, the branch, and how to build and test;
+   - a pointer to the design principles it must keep
+     (`system-design-review`, `references/design-principles.md`);
+   - the worktree, the branch, and the build and test commands;
    - open questions the brief could not settle, so the PR session asks the
      user before it codes around them;
    - last, the section in `references/finish.md`, with `{{STATUS_PATH}}`
      replaced by `briefs/<project-id>/<item-id>.status.json` under the
      projects root (absolute path).
+   Read only what these need: the project file, the headings of the design
+   document and the sections of this item, and `git` state. Do not survey the
+   code for file:line references; the PR session does that.
 1. In an interactive session, tell the user to press Start on the item's
    card; the page opens the PR session with a prompt that points at the
    brief and tags the session. In a non-interactive run, end with the brief
