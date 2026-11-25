@@ -129,7 +129,10 @@ language:
      `references/design-principles.md`);
    - the worktree, the branch, and how to build and test;
    - open questions the brief could not settle, so the PR session asks the
-     user before it codes around them.
+     user before it codes around them;
+   - last, the section in `references/finish.md`, with `{{STATUS_PATH}}`
+     replaced by `briefs/<project-id>/<item-id>.status.json` under the
+     projects root (absolute path).
 1. In an interactive session, tell the user to press Start on the item's
    card; the page opens the PR session with a prompt that points at the
    brief and tags the session. In a non-interactive run, end with the brief
@@ -144,6 +147,16 @@ file: add the PR number, split the item, or set `state`. Then run `check`.
 
 Run `sync` after every `update`. It rewrites only the generated pages; a
 sub-project change also changes the parent's page, so sync both.
+
+## Item Status File
+
+A PR session keeps `briefs/<project-id>/<item-id>.status.json` current, as
+the brief's Finish section says: `implementing`, `reviewing` (an automatic
+`cross-agent-review` once the tests pass), `needs_you` with its questions,
+and `ready_to_commit`. The Projects page shows the state on the item's card
+and lists `needs_you` questions and `ready_to_commit` under "Needs you". The
+session deletes the file once its PR is open. `status` reports these states
+with the items in progress.
 
 ## Following PR Sessions
 
