@@ -54,8 +54,13 @@ it is more specific or stricter.
 - Start explanations with a simple intuition, then introduce technical detail.
 - Keep code comments about the code's behavior or design constraint. Put
   reasoning history and before/after discussion in commits or reviews.
+- When the user asks to design a new feature with them, asks for a top-down
+  design, or runs `/top-down-design`, use the `top-down-design` skill. It
+  decides one level at a time and calls `cross-agent-design-doc` once at the
+  end.
 - When the user asks to write a design document (design doc, 設計文件,
-  design 文件), use the `cross-agent-design-doc` skill and run its full review.
+  design 文件) in one pass, or to review an existing one, use the
+  `cross-agent-design-doc` skill and run its full review.
   Use `reader-first-writing` for a design document only when the user asks for
   an English version for a repository.
 - Before writing other text for other readers—PR descriptions, review

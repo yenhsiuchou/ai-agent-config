@@ -261,6 +261,21 @@ Use this chapter shape when it fits:
 Draw every diagram with the `markdown-diagrams` skill, and run its DOT check
 before giving the material to the learner.
 
+## Called From A Design
+
+The `top-down-design` skill calls this skill when the user wants a concept
+taught before a decision. Then:
+
+- The caller gives the course directory, the slug, and the decision the
+  course serves; do not ask for them. Skip the interview questions the
+  caller's context already answers, such as the goal.
+- Start each chapter's `What This Chapter Does` with the decision it serves,
+  for example "為了決定 D3：誰 retype template chain".
+- Use the IR and code of the design under discussion in the worked cases.
+- Teach one chapter at a time. When a chapter is verified, or the learner
+  says to continue, report the chapter's path to the caller and return; the
+  caller links it to the decision and asks the decision again.
+
 ## End A Session
 
 End when the learner asks to stop or after two or three concepts. Ensure

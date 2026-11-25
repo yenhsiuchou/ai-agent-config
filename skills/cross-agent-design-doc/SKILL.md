@@ -127,6 +127,15 @@ When an earlier archive of the same document exists, list its `ledger.md` in
 `target.md`; a reviewer raises a finding dropped there again only with new
 evidence.
 
+**Entry from `top-down-design`:** the document was decided level by level,
+and the project file lists its decisions and `design_frozen` steps. Record in
+`target.md` the project file, the scope note the caller gives (one level, or
+the whole document for the final review), and that each decision is frozen.
+A finding that would change a decision is a reopen request: give it the
+status it earns, but in Step 5 move it to `待決定` with the decision id
+instead of editing the decision, and list it in the report so the caller can
+reopen the decision with the user.
+
 ## Step 1: Write the Document
 
 1. Read the code, tests, and design documents the problem touches. Run the

@@ -57,6 +57,10 @@ items:
   - id: <item-id>
     project: <child project id>   # a sub-project item
 reviews: [<archive slug>]     # design review archives of the doc
+design_frozen: [frame, ownership]   # top-down steps already frozen
+courses:                      # direct-instruction courses of this design
+  - slug: <slug>
+    dir: <course directory, relative to this file>
 invariants:                   # global rules every decision keeps
   - id: I1
     text: <one sentence>
@@ -69,11 +73,17 @@ decisions:
     choice: <the answer, once there is one>
     date: 2026-01-31          # when it was last decided or revalidated
     depends_on: [D0]          # decisions this one builds on
+    learn: [<chapter path>]   # course chapters taught for this decision
 ```
+
+The `top-down-design` skill owns `invariants`, `design_frozen`, `courses`,
+and the decisions of a design it runs.
 
 `check` warns when the decision tree is not top-down: a decision dated before
 a parent, a decision on a higher level than a parent, a decided decision under
-a reopened or open ancestor, a root decision that serves no invariant.
+a reopened or open ancestor, a root decision that serves no invariant, a
+decision below the first step not yet frozen, an unsettled decision in a
+frozen step.
 
 The design session owns `decisions` and `reviews`; the manager reads them to
 report what waits for the user.
