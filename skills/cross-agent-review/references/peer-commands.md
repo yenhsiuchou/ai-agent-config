@@ -33,12 +33,14 @@ python3 <cross-agent-review-dir>/scripts/run_codex.py \
 ## Codex orchestrator → Claude Code peer
 
 ```bash
-cd <workdir> && claude -p --permission-mode dontAsk \
+cd <workdir> && claude -p --model claude-opus-5-5 --permission-mode dontAsk \
   --allowedTools "Read Grep Glob Skill Agent Bash(git diff:*) Bash(git log:*) Bash(git show:*) Bash(git rev-parse:*) Bash(git merge-base:*) Bash(gh pr view:*) Bash(gh pr diff:*)" \
   --add-dir <run-dir> --output-format text \
   < <run-dir>/prompt-<step>.md > <run-dir>/<output>.md 2> <run-dir>/<output>.log
 ```
 
+- `--model claude-opus-5-5` names the model by its full id: an older
+  `claude` CLI resolves the `opus` alias to an older model.
 - `dontAsk` denies every tool outside `--allowedTools`, so the peer stays
   read-only without prompting.
 - `--add-dir` lets the peer read the run directory.
