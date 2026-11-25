@@ -17,7 +17,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "python3 ~/.claude/hooks/title-review-session-with-pr-number.py",
+            "command": "python3 ~/.claude/hooks/title-session.py",
             "timeout": 10
           }
         ]
