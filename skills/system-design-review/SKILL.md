@@ -53,6 +53,8 @@ exist and at the component responsible for its resulting state transition.
 `Atomic` means that one component owns one complete semantic transition and the
 information needed for it. It does not mean that every feature must use one
 pass: preparation and emission may belong at different information boundaries.
+`references/design-principles.md` states this rule and the other principles
+that every design and every fix must keep.
 
 Before you report that a decision ignores a cost, find the component that owns
 that cost: a pass in the pipeline, a PR in the same stack, or an open PR by the
@@ -172,13 +174,20 @@ IR contract: a type, attribute, operation, or verifier. A comment that calls
 both meanings phase-specific is not enough.
 If the evidence does not establish the choice, report a **Design question**.
 State the conflicting definitions, a concrete input that reaches the broader
-case, which consumers would interpret it differently, and the smallest next
+case, which consumers would interpret it differently, and the next
 step: define the term globally, introduce a narrower name or predicate, or
 document and enforce a representation boundary.
 
 Do not require a new persistent annotation merely because a local pass needs a
 derived classification. Prefer a named local predicate when the property is
 cheaply derivable and has no cross-pass semantic contract.
+
+## Check the Design Principles
+
+Fill the Principle Gate of `references/design-principles.md` for the change
+itself, and for each project principle in the review context. A break with a
+built trigger is a **Confirmed defect**; a break whose trigger is not built is
+a **Design question**.
 
 ## Report Only Actionable Design Work
 
@@ -187,8 +196,9 @@ Report a candidate only when the review can establish all of these:
 - a location and evidence;
 - a concrete trigger;
 - a meaningful impact on a user, contract, stage, cost, or failure mode; and
-- a minimum next step: a focused change that passes the fix check below, or a
-  verification that resolves the uncertainty.
+- a next step: a change that passes the fix check below, or a verification
+  that resolves the uncertainty. Choose the fix that keeps the design
+  principles, not the smallest patch; a local patch often breaks them.
 
 Measure a cost at the stage where it is paid. An op count after an early pass
 is not a runtime or compile-time cost; lower the IR to where the cost
@@ -228,10 +238,19 @@ review engine:
   current code, including variants of the trigger (for example, the same read
   that is also written). Check each against the existing checks and tests on
   that path. The fix must not let one of them skip a check.
+- **Principles:** fill the Principle Gate of
+  `references/design-principles.md` for the fix. A fix that breaks a
+  principle is not a fix: replace it with one that keeps every principle,
+  even when it is larger, and give its size.
 - Prefer a fix that removes a special case over one that adds a rule.
 
-When a fix cannot pass this check, give the check that settles the question
-instead of a fix.
+When a fix cannot pass this check, give the check or the decision that
+settles the question instead of a fix.
+
+**Independent gate.** Before the output, give the Next step of every finding
+to a fresh agent with `references/principle-gate-prompt.md`, as the
+Independent Gate in `references/design-principles.md` says. When the harness
+cannot start an agent, say so in the evidence limits.
 
 ## Target: A Design Document
 
@@ -264,6 +283,8 @@ the same rules, read against the current code instead of a diff:
   no step leaves the pipeline in a state the document does not acknowledge.
 - **Terms and figures.** Each term is defined once and used with one meaning.
   Each diagram and IR example agrees with the text next to it.
+- **Principles.** Fill the Principle Gate for the document's proposal, one
+  table per decision that changes the IR.
 
 The Fix Check applies to the document's own proposal as it does to a finding's
 Next step. Report findings in the format the calling skill gives; without one,
@@ -299,7 +320,11 @@ this structure for every reported item:
 - **Trigger:** ...
 - **Impact:** ...
 - **Next step:** ...
+- **Principle gate:** pass | waived by the user: <principle, reason>
 ```
+
+Put the Principle Gate tables in a `## Principles` section after the findings,
+with the result of the independent gate for each finding.
 
 A project may have local, non-versioned review context at
 `~/.agent-config-local/review-context/<repository directory name>/`. When it

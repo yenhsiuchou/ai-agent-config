@@ -141,6 +141,8 @@ evidence.
 1. Give every factual claim its evidence in the text: a file:line, a test, or
    a command and its IR.
 1. Run the self-check at the end of `references/doc-style.md`.
+1. Fill the Principle Gate of `../system-design-review/references/design-principles.md` for each decision that changes the IR.
+   Change a decision that breaks a principle before the review starts.
 1. Copy the document to `doc-r0.md`.
 
 ## Step 2: Independent Reviews (Round 0)
@@ -152,7 +154,8 @@ writes findings in `references/doc-finding-format.md`.
 Rerun a reviewer once, naming what is missing, when its output:
 
 - does not use the finding format; or
-- lacks `## Coverage`, or its Facts table, necessity table, or style check; or
+- lacks `## Coverage`, or its Facts table, necessity table, Principle Gate
+  tables, or style check; or
 - reports no finding and has no `## Candidates not reported` list.
 
 If the rerun fails the same check, stop as for a reviewer failure.
@@ -193,6 +196,15 @@ check, the reviews, and the probe outputs under `probes/`. A reviewer reruns
 or builds a probe only to dispute a result or to check a claim that no
 existing result covers.
 
+## Step 4b: Principle Gate
+
+Run the Principle Gate of Step 4b of `cross-agent-review` on every row that is
+`accepted`, `unverified`, or `unresolved`, and on the late findings, before
+any edit. Give the gate `doc-r0.md`, the two reviews, and the ledger. Save its
+answer as `gate.md`, and update the rows by the same rules: a `gate-revised`
+row uses the gate's Next step; a row with no Next step that keeps the
+principles moves to `待決定` with the decision the gate names.
+
 ## Step 5: Apply the Findings
 
 Edit the document; keep each edit to what the finding's accepted Next step
@@ -211,6 +223,7 @@ is true. Compare each shortened claim with its `doc-r0.md` text before Step 6.
 | Status | Action |
 | ------ | ------ |
 | `author` (`Clarity`) | Apply the finding's Next step. |
+| `gate-revised` | Apply the gate's Next step, and mark it `gate 修改，未經 exchange` in `## Review 紀錄`. |
 | `accepted` | Apply the accepted text. For a `Design question` whose Next step is a check, run the check when you can and write its result into the document; otherwise move it to the open decisions. |
 | `accepted` `Optional trade-off` | Apply the option the accepted text recommends. Without a recommendation, move it to the open decisions. |
 | `unverified` | Build the probe the row names. Apply the finding when the probe confirms it; otherwise move it to the open decisions with the probe result. |
@@ -248,7 +261,7 @@ any substantive problem.
    open decisions, and the archive path. Copy the document to `doc-final.md`.
 1. Archive the run to
    `${CROSS_AGENT_DESIGN_DOC_ARCHIVE:-~/WorkSpace/Notes/reviews/design-docs}/<doc-slug>/<UTC yyyymmdd-HHMM>/`:
-   `target.md`, `ledger.md`, `report.md`, every `doc-*.md`, `review-*.md`,
+   `target.md`, `ledger.md`, `gate.md`, `report.md`, every `doc-*.md`, `review-*.md`,
    `round-*.md`, and `final-*.md`, and the probe sources under 50 KB. Do not
    copy builds, logs, or prompts.
 1. Write `report.md` and give the user, in their language:
@@ -258,6 +271,7 @@ any substantive problem.
    - substantive problems from the final read: those applied without review,
      and those left to the user;
    - the document size before and after the review;
+   - the principle gate result of each row and each `gate-revised` Next step;
    - rounds used, reviewer reruns or failures, probes built, and the archive
      path.
 

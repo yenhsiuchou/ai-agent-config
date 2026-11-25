@@ -86,6 +86,7 @@ python3 <skill-dir>/scripts/render_prompt.py \
 | ------------------------ | ------------------------------------------------------------ |
 | `peer-review-prompt.md`  | `RUN_DIR`, `SKILL_DIR`, `PREFIX`                             |
 | `peer-exchange-prompt.md`| `RUN_DIR`, `SKILL_DIR`, `PEER_NAME`, `PREFIX`, `ROUND`, `PREVIOUS_ROUND_FILES` |
+| `../system-design-review/references/principle-gate-prompt.md` | `PRINCIPLES`, `PROJECT_CONTEXT`, `FINDINGS`, `IDS`, `WORKDIR` |
 
 For round 1, set `PREVIOUS_ROUND_FILES=none (this is round 1)`. Put any extra
 instruction in `target.md` or `ledger.md`, not in the rendered prompt.
@@ -197,7 +198,8 @@ order the peer prompt asks for, including the two-sentence summary in place of
 the Background; the full Background is written once, in the report.
 
 Apply the Fix Check of `system-design-review` to the Next step of every
-finding, code findings included.
+finding, code findings included. It includes the Principle Gate of
+`../system-design-review/references/design-principles.md`.
 
 Check the peer's output before you use it. Rerun the peer once, naming what is
 missing, when:
@@ -209,7 +211,7 @@ missing, when:
   review or the code-review engine without a reason such as a missing skill;
   or
 - its `## Coverage` section lacks any of the five design checklist tables or
-  the five code checklist results; or
+  the five code checklist results, or the Principle Gate tables; or
 - it reports no design finding and has no `## Design candidates not reported`
   list.
 
@@ -273,8 +275,9 @@ both it counts as `agree`. An `agree` with a finding whose Reached is `read` or
 `not built` means you checked its layers yourself; say which ones.
 
 Each answer covers the Next step too. If the Next step fails the Fix Check of
-`system-design-review`, answer `revise` with a Next step that passes,
-and cite the owner or the same-class input as evidence.
+`system-design-review`, including the Principle Gate, answer `revise` with a
+Next step that passes, and cite the owner, the same-class input, or the
+principle as evidence.
 
 After both answers, update each row from its current text:
 
@@ -303,6 +306,25 @@ Either agent may mark a ledger entry `ledger-error` when the ledger misstates
 its answer. Fix the entry from that agent's response file before the next
 round.
 
+## Step 4b: Principle Gate
+
+Both agents wrote and agreed on the Next steps, so neither is an independent
+check of them. Start a fresh agent with the rendered
+`../system-design-review/references/principle-gate-prompt.md` for every row
+that is `accepted`, `unverified`, or `unresolved`, and for the late findings.
+Give it `review-claude.md`, `review-codex.md`, and the ledger's current text,
+not the round files. Save its answer as `gate.md`.
+
+For each row the gate marks `breaks`:
+
+- When the gate gives a Next step that keeps every principle, replace the
+  Next step with it and mark the row `gate-revised` in the ledger. Neither
+  agent reviewed the new text; the report says so.
+- Otherwise, change the row to a `Design question` whose Next step is the
+  decision the gate names.
+
+Do not drop a row for a gate result; only the Next step changes.
+
 ## Step 5: Report
 
 Write `final.md`, then show it to the user in their preferred language:
@@ -325,7 +347,8 @@ Write `final.md`, then show it to the user in their preferred language:
    it.
 1. **Dropped findings:** one line each, with the reason.
 1. **Late findings:** listed separately, marked as reviewed by one agent only.
-1. **Process:** rounds used, peer reruns or failures, each probe the
+1. **Process:** rounds used, peer reruns or failures, the principle gate
+   result of each row and each `gate-revised` Next step, each probe the
    orchestrator built with its result, and coverage gaps from either agent's
    `## Coverage`, such as tests that neither agent could run.
 
@@ -333,7 +356,7 @@ When the user asks for text for the author, use the `review-comment-drafting`
 skill with the accepted findings the user picks.
 
 Then archive the run at the path in **Run Directory**: copy `target.md`,
-`ledger.md`, `final.md`, every `review-*.md` and `round-*.md`, and the probe
+`ledger.md`, `gate.md`, `final.md`, every `review-*.md` and `round-*.md`, and the probe
 sources from `probes/` (inputs such as `.mlir`, `.cpp`, `.py`, `.sh`, each under
 50 KB). Do not copy builds, worktrees, logs, patches, or probe outputs. Give
 the archive path in the report.

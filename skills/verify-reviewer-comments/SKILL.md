@@ -28,7 +28,7 @@ Give each comment one kind:
 | ---- | ------- | ----------------- |
 | Reachability or correctness | "this input writes the wrong elements" | Step 3 |
 | Missing test | "this branch has no test" | a test, plus a mutation that it catches |
-| Design or structure | "move this state out of the context" | the owner of the concept, and the callers it changes |
+| Design or structure | "move this state out of the context" | the owner of the concept, the callers it changes, and Step 5 |
 | Naming, comment, or message | "this name is vague" | the project rules for names and comments |
 
 ## Step 3: Check Reachability and Correctness
@@ -71,18 +71,35 @@ For each test the comment asks for, or that your fix adds:
 1. If the case cannot be built, give the rule that blocks it, with Step 3
    evidence.
 
-## Step 5: Report Before Changing Code
+## Step 5: Check Each Change Against the Design Principles
+
+A reviewer's suggestion can fix the problem it names and still break a design
+principle. For each change a comment asks for, and for each change you plan,
+fill the Principle Gate of
+`../system-design-review/references/design-principles.md`, plus the project
+principles in the review context.
+
+- A suggestion that breaks a principle gets the verdict `adjust`, with a change
+  that fixes the same problem and keeps every principle, or `decline`, with
+  the principle's question and its answer as evidence.
+- Give each planned change to a fresh agent with
+  `../system-design-review/references/principle-gate-prompt.md`, without your
+  reasoning. Change a plan the gate marks `breaks` before you report it.
+
+## Step 6: Report Before Changing Code
 
 Show the user one table, one row per comment:
 
-| # | Location | Claim | Evidence | Verdict | Planned change |
-| - | -------- | ----- | -------- | ------- | -------------- |
+| # | Location | Claim | Evidence | Verdict | Planned change | Principle gate |
+| - | -------- | ----- | -------- | ------- | -------------- | -------------- |
 
 - Evidence is a file:line, a probe with its result, or a mutation result.
+- Principle gate is `pass`, or the principle the reviewer's suggestion breaks
+  and how the planned change keeps it.
 - Say plainly when your verdict differs from the reviewer's suggestion, and why.
 - Wait for the user's decision. Do not change code in this step.
 
-## Step 6: Apply and Reply
+## Step 7: Apply and Reply
 
 After the user approves:
 

@@ -14,6 +14,11 @@ evidence.
    Document**, with its ledger, ownership timeline, necessity table, and Fix
    Check. Check every factual claim against the current code in the
    repository, not against the document's own words.
+1. Fill the Principle Gate of
+   `{{SKILL_DIR}}/../system-design-review/references/design-principles.md`
+   for each decision of the document that changes the IR, and for the Next
+   step of each of your findings. A break in the document is a finding. Do
+   not propose a Next step that breaks a principle.
 1. Check the document against `{{SKILL_DIR}}/references/doc-style.md`, using
    its self-check table. A row that fails is a `Clarity` finding.
 
@@ -43,5 +48,6 @@ these sections in order:
      | Claim (section) | Evidence (file:line, test, or command) | Verdict |
    - `### Necessity`: the necessity table of `system-design-review`.
    - `### Ownership`: the ownership timeline.
+   - `### Principles`: the Principle Gate tables.
    - `### Style`: the self-check table of `doc-style.md` with pass or fail.
    - The files you read in full and every command you ran with its result.

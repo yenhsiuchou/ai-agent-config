@@ -53,7 +53,10 @@ further change, answer `revise` with the full new text.
   finding, answer `withdraw` or `revise` it with a trigger that reaches the
   code.
 - Answer the Next step too. If it fails the Fix Check of
-  `system-design-review`, answer `revise` with a Next step that passes.
+  `system-design-review`, or breaks a principle in
+  `{{SKILL_DIR}}/../system-design-review/references/design-principles.md`,
+  answer `revise` with a Next step that passes, and cite the principle's
+  question and its answer.
 - Do not raise new findings. List a new problem found while checking a claim
   under `## Late findings`, in `{{SKILL_DIR}}/references/doc-finding-format.md`.
 - If the ledger misstates one of your earlier answers, add a line

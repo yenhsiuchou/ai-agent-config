@@ -50,6 +50,10 @@ below and adds a fix verification.
   and wrong-typed arguments. Record them in the parameter-contract table.
 - Do not drop a low-severity finding only because no current caller reaches
   it; report it with Reached `hypothetical`, as the finding format says.
+- Check the change and the Next step of every finding, code findings included,
+  against the principles in
+  `{{SKILL_DIR}}/../system-design-review/references/design-principles.md`.
+  Do not propose a Next step that breaks one.
 
 **Output:** your final message is the deliverable. Write it in English with
 these sections in order:
@@ -65,6 +69,7 @@ these sections in order:
    command you ran with its result. Then the five design checklist tables, and
    the five code checklist results: parameter contracts with doc comments and
    diagnostics, branches and tests, assertion quality, reachability, and
-   structure.
+   structure. Then the Principle Gate table for the change and for the Next
+   step of each finding.
 
 Do not write files.

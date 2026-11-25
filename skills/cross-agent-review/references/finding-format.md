@@ -10,6 +10,7 @@ sentences, and put long evidence in a fenced block below it.
 - **Reached:** built | read | not built | hypothetical — <the evidence, below>
 - **Impact:** <what breaks, for whom, or which contract it violates>
 - **Next step:** <a fix direction that passes the fix check, or the check that settles the question>
+- **Principle gate:** pass | waived by the user: <principle, reason>
 ```
 
 - `<ID>`: `CL-<n>` for Claude, `CX-<n>` for Codex.
@@ -64,8 +65,11 @@ no current caller reaches it.
 
 The Next step of every finding, design or code, must pass the **Fix Check** in
 the `system-design-review` skill: reuse the existing owner of each concept the
-fix decides, and do not let a same-class input skip an existing check. When it
-cannot pass, give the check that settles the question instead of a fix. A fix
+fix decides, do not let a same-class input skip an existing check, and keep
+every principle in `../system-design-review/references/design-principles.md`.
+Choose the fix that keeps the principles, not the smallest patch. When it
+cannot pass, give the check or the decision that settles the question instead
+of a fix. A fix
 that adds a check must name an input that reaches it; a check that no input
 can reach is dead code.
 

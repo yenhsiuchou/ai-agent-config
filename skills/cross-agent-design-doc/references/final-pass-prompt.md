@@ -29,8 +29,11 @@ not see its answer now.
    the review added text without removing what it replaced, the table cells
    longer than one clause, and the mechanisms in `設計` shown only as prose or
    tables. For each, say what to cut, split, or draw.
-1. **Substantive problems.** Report a design problem only when the revision
-   introduced it or the review missed it, with evidence from the code, in
+1. **Substantive problems.** Check each edited section against the
+   principles in
+   `{{SKILL_DIR}}/../system-design-review/references/design-principles.md`;
+   an edit that breaks one is a substantive problem. Report a design problem
+   only when the revision introduced it or the review missed it, with evidence from the code, in
    `{{SKILL_DIR}}/references/doc-finding-format.md` with IDs `{{PREFIX}}-F1`,
    `{{PREFIX}}-F2`, …. Do not re-raise a dropped or unresolved row.
 

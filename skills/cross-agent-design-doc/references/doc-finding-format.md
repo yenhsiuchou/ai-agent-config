@@ -10,6 +10,7 @@ put long evidence in a fenced block below it.
 - **Reached:** built | read | not built | hypothetical | n/a — <the evidence>
 - **Impact:** <what goes wrong if the document stays as written>
 - **Next step:** <the edit to the document, or the check that settles the question>
+- **Principle gate:** pass | waived by the user: <principle, reason>
 ```
 
 - `<ID>`: `CL-<n>` for Claude, `CX-<n>` for Codex.
@@ -30,8 +31,9 @@ at a file:line. A suspected problem you could not build is a
 its Next step.
 
 **Next step** passes the Fix Check of `system-design-review`: it reuses the
-existing owner of each concept it decides, and lets no same-class input skip
-an existing check. For `Clarity`, give the replacement text or the diagram
+existing owner of each concept it decides, lets no same-class input skip an
+existing check, and keeps every principle in
+`../system-design-review/references/design-principles.md`. Choose the design that keeps the principles, not the smallest edit. For `Clarity`, give the replacement text or the diagram
 change.
 
 When a review has no findings, say so in one line and list only material

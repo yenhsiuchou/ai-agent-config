@@ -9,6 +9,10 @@ it is more specific or stricter.
   before proposing a solution.
 - Check each change against the whole design. Do not accept a locally correct
   change that breaks a global invariant or layering boundary.
+- Keep the design principles in the `system-design-review` skill's
+  `references/design-principles.md`, such as atomic transitions, in every
+  design and fix you propose, including review findings. A smaller patch that
+  breaks one is not a fix.
 - Cover normal, degraded, and boundary paths before proposing a design.
 - Treat existing code as a choice that can change, not as a constraint.
   Separate real constraints (hardware, external contracts, stated global

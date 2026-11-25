@@ -47,9 +47,11 @@ further change, answer `revise` with the full new text.
   finding of yours whose trigger is rejected is `withdraw` or a `revise` with a
   trigger that reaches the code.
 - Answer the Next step too. If it fails the Fix Check of the
-  `system-design-review` skill (it defines an existing concept a second time, or lets a same-class input
-  skip an existing check), answer `revise` with a Next step that passes, and
-  cite the owner or the input as evidence.
+  `system-design-review` skill (it defines an existing concept a second time,
+  lets a same-class input skip an existing check, or breaks a principle in
+  `{{SKILL_DIR}}/../system-design-review/references/design-principles.md`),
+  answer `revise` with a Next step that passes, and cite the owner, the input,
+  or the principle's question and its answer as evidence.
 - Do not raise new findings. A new problem found while checking a claim goes
   under `## Late findings` in the finding format.
 - If the ledger misstates one of your earlier answers, add a line
