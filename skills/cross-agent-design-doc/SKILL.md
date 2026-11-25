@@ -276,3 +276,48 @@ any substantive problem.
      path.
 
 Do not commit or push the document unless the user asks.
+
+## Splitting Out a Sub-Design
+
+When the work of one item of a tracked project needs its own design, write
+that design as a separate document and a sub-project, so that each level has
+its own progress graph. Progress lives in project files under the projects
+root, never in a design document; the format is in the `project-manager`
+skill.
+
+1. Write the child document with this skill, as a new run. Its problem is the
+   item's problem; its constraints include the parent design's decisions.
+1. Create the child's project file under the projects root, with `doc`
+   linking the child document, `parent` set to the parent project's id, and
+   one item per PR of the child design.
+1. In the parent project file, either change the item to
+   `project: <child-id>`, or keep it with `state: cancelled`, a `note` that
+   names the child, and add a new item with `project: <child-id>`. A
+   dependency of the old item moves to the child item that needs it.
+1. Run the project tool's `check` and `sync`, which regenerate both
+   projects' management pages. Do not add progress to either design
+   document.
+
+## Record Decisions in the Project
+
+When the design belongs to a tracked project, keep its project file in step
+with the document, so the project UI shows where the design stands:
+
+- Each decision of the document's open-decisions section is an entry under
+  `decisions:`, with a one-sentence English `question`, and `choice` once
+  there is one. `depends_on` names the decisions whose answer this one builds
+  on.
+- `status` follows the decision: `open` while it is researched, `proposed`
+  when options or a recommendation wait for the user, `decided` once the user
+  chooses (with `date`), and `superseded` when a later decision replaces it.
+- Order the tree from the top down. `invariants:` holds the document's global
+  rules; each decision has a `level` (`ownership`, then `contract`, then
+  `mechanism`) and builds only on decisions at its level or above; a root
+  decision names the invariants it `serves`.
+- When a finding overturns a decided parent, set the parent to `reopened`;
+  do not patch the child alone. After the parent is decided again, restate
+  each descendant and update its `date`.
+- Add the run's archive slug to `reviews:` the first time a review of the
+  document is archived.
+- Run the project tool's `check` after each change.
+
