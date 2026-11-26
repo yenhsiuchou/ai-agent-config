@@ -18,7 +18,9 @@ applied. Answer every principle's question against that code. Look first for
 the common breaks the principles list: a pass that leaves a transition for a
 later pass, a check that can disagree with the rewrite, a mutation before a
 failure path, a marker that nothing verifies, a second definition of an owned
-fact, a guard downstream of the owner.
+fact, a guard downstream of the owner, a flag or option that gives a shared
+helper a second behavior, an allowlist entry for one more kind, a special
+case for one edge input.
 
 **Rules:**
 

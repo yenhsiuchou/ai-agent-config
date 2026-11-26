@@ -127,6 +127,31 @@ reason.
 **Question:** Does the design shape itself around incidental existing behavior
 without stating that decision?
 
+### extend-by-contract
+
+A component handles a new case through a contract that covers the whole class
+of inputs: a property it checks, or an operation with its own name and
+contract. A new case does not get a mode, a list entry, or a guard of its own.
+
+**Question:** Does the fix make a shared component behave differently for one
+caller, accept inputs by listing their kinds, or guard one edge input
+without naming the design gap that produces it?
+
+Common breaks:
+
+- A flag or option on a shared helper that selects a second behavior for one
+  caller, such as a flag on `createNewToOldAdapter` or a "chain retype"
+  option on `changeBufferType`. Give the new behavior its own operation with
+  its own contract, such as `planAliasGraphRetype` and `applyAliasGraphRetype`,
+  or write the guarantee the caller needs into the helper's contract.
+- An allowlist of op kinds or template names, extended for each new case,
+  such as adding ring all-gather to a list of supported templates. Check the
+  property the code relies on, so that the next template passes or fails by
+  that property.
+- A special case for one edge input that a review found. First name the
+  design gap that produces such inputs, and fix that gap; a run of edge-case
+  findings on one design points to one such gap.
+
 ## Project Principles
 
 A project may add its own principles in its review context
