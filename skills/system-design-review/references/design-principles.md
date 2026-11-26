@@ -140,14 +140,14 @@ without naming the design gap that produces it?
 Common breaks:
 
 - A flag or option on a shared helper that selects a second behavior for one
-  caller, such as a flag on `createNewToOldAdapter` or a "chain retype"
-  option on `changeBufferType`. Give the new behavior its own operation with
-  its own contract, such as `planAliasGraphRetype` and `applyAliasGraphRetype`,
-  or write the guarantee the caller needs into the helper's contract.
+  caller, such as a flag on an adapter builder or a "retype the whole graph"
+  option on a buffer-retype helper. Give the new behavior its own operation
+  with its own contract, such as a plan step and an apply step for the whole
+  graph, or write the guarantee the caller needs into the helper's contract.
 - An allowlist of op kinds or template names, extended for each new case,
-  such as adding ring all-gather to a list of supported templates. Check the
-  property the code relies on, so that the next template passes or fails by
-  that property.
+  such as adding one more collective template to a list of supported ones.
+  Check the property the code relies on, so that the next template passes or
+  fails by that property.
 - A special case for one edge input that a review found. First name the
   design gap that produces such inputs, and fix that gap; a run of edge-case
   findings on one design points to one such gap.
