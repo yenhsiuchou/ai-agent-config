@@ -10,8 +10,19 @@ put long evidence in a fenced block below it.
 - **Reached:** built | read | not built | hypothetical | n/a — <the evidence>
 - **Impact:** <what goes wrong if the document stays as written>
 - **Next step:** <the edit to the document, or the check that settles the question>
+- **Changes decision:** <the decision or section it changes> | no — edge case
 - **Principle gate:** pass | waived by the user: <principle, reason>
 ```
+
+**Changes decision** says whether the finding changes what the document
+decides: an ownership, a contract, a mechanism, a PR split, or a stated
+constraint. A finding is `no — edge case` when the design stays as written
+and only one more input must be handled or tested; its Next step is a row in
+the edge-case test list of `驗證`, with the PR that tests it. When several
+edge cases come from one design gap, report one finding that names the gap
+and the decision it changes, as `extend-by-contract` in
+`../system-design-review/references/design-principles.md` says. `Clarity`
+findings are `no`.
 
 - `<ID>`: `CL-<n>` for Claude, `CX-<n>` for Codex.
 - `<category>`:

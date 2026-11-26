@@ -127,6 +127,12 @@ When an earlier archive of the same document exists, list its `ledger.md` in
 `target.md`; a reviewer raises a finding dropped there again only with new
 evidence.
 
+**Stop rule.** Before you rerun on a document that has an archive, read the
+latest archived ledger. When none of its `accepted`, `gate-revised`, or
+`unresolved` rows changes a decision, the design is stable: tell the user so,
+name the edge cases that went to the test list, and run again only when the
+user still asks, or when the document changed a decision since that run.
+
 **Entry from `top-down-design`:** the document was decided level by level,
 and the project file lists its decisions and `design_frozen` steps. Record in
 `target.md` the project file, the scope note the caller gives (one level, or
@@ -174,10 +180,13 @@ If the rerun fails the same check, stop as for a reviewer failure.
 Write `ledger.md` as in Step 3 of `cross-agent-review`, with one row per
 finding of both reviews:
 
-| ID | Category | Current title | Raised by | Reached | CL | CX | Status |
-| -- | -------- | ------------- | --------- | ------- | -- | -- | ------ |
+| ID | Category | Current title | Raised by | Reached | Decision | CL | CX | Status |
+| -- | -------- | ------------- | --------- | ------- | -------- | -- | -- | ------ |
 
 - The raising reviewer's column starts as `raised`.
+- **Decision** copies the finding's `Changes decision` field: the decision
+  it changes, or `edge`. An exchange answer may dispute it like any other
+  field.
 - **Reach check.** For each finding about code behavior whose Reached is
   `read` or `not built`, try to build its trigger as a probe under `probes/`
   and record the result below the table: `built` with the command and
@@ -237,6 +246,7 @@ is true. Compare each shortened claim with its `doc-r0.md` text before Step 6.
 | `accepted` `Optional trade-off` | Apply the option the accepted text recommends. Without a recommendation, move it to the open decisions. |
 | `unverified` | Build the probe the row names. Apply the finding when the probe confirms it; otherwise move it to the open decisions with the probe result. |
 | `unresolved` | Move it to the open decisions: the question, each reviewer's strongest argument with its evidence, and the check that would decide it. |
+| any accepted status, Decision `edge` | Add a row to the edge-case test list in `驗證`: the input, the expected result, and the PR that tests it. Do not change the design text. |
 | `dropped`, `merged` | No edit. |
 | Late findings | Judge each one; record what you applied in the ledger. |
 
@@ -267,7 +277,10 @@ any substantive problem.
    - Otherwise, add it to `待決定` and list it in the report; the user decides
      whether to run the skill again.
 1. Fill `## Review 紀錄` of the document: rounds used, counts per status,
-   open decisions, and the archive path. Copy the document to `doc-final.md`.
+   the findings that changed a decision, the next-run advice, open
+   decisions, and the archive path. The advice is `停止` when no
+   `accepted`, `gate-revised`, or `unresolved` row changes a decision, and
+   `再跑` otherwise, with the decisions that changed. Copy the document to `doc-final.md`.
 1. Archive the run to
    `${CROSS_AGENT_DESIGN_DOC_ARCHIVE:-~/WorkSpace/Notes/reviews/design-docs}/<doc-slug>/<UTC yyyymmdd-HHMM>/`:
    `target.md`, `ledger.md`, `gate.md`, `report.md`, every `doc-*.md`, `review-*.md`,
@@ -275,7 +288,9 @@ any substantive problem.
    copy builds, logs, or prompts.
 1. Write `report.md` and give the user, in their language:
    - the document path and its one-line conclusion;
+   - the next-run advice, `停止` or `再跑`, and the decisions that changed;
    - what the review changed, one line per applied finding;
+   - the edge cases added to the test list;
    - the open decisions;
    - substantive problems from the final read: those applied without review,
      and those left to the user;

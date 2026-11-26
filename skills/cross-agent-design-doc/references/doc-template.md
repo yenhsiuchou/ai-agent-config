@@ -50,11 +50,18 @@ pipeline is in after it>
 
 <tests and probes that show the design works>
 
+Edge case 測試清單：
+
+| Edge case | 預期結果 | 哪個 PR 測 | 來源 finding |
+|---|---|---|---|
+
 ## Review 紀錄
 
 | 項目 | 內容 |
 |---|---|
 | 輪數 | |
 | accepted / dropped / unresolved | |
+| 改變決策的 finding | |
+| 下一輪 | 停止 / 再跑：<理由> |
 | Archive | |
 ````
