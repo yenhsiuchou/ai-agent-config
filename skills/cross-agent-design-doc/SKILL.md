@@ -185,8 +185,8 @@ finding of both reviews:
 
 - The raising reviewer's column starts as `raised`.
 - **Decision** copies the finding's `Changes decision` field: the decision
-  it changes, or `edge`. An exchange answer may dispute it like any other
-  field.
+  it changes, `edge`, or `n/a` for `Clarity`. An exchange answer may
+  dispute it like any other field.
 - **Reach check.** For each finding about code behavior whose Reached is
   `read` or `not built`, try to build its trigger as a probe under `probes/`
   and record the result below the table: `built` with the command and
@@ -240,13 +240,13 @@ is true. Compare each shortened claim with its `doc-r0.md` text before Step 6.
 
 | Status | Action |
 | ------ | ------ |
+| Decision `edge`, status `accepted` or `gate-revised` | Add a row to the edge-case test list in `驗證`: the input, the expected result, and the PR that tests it. Do not change the design text. This row comes before the status rows below. |
 | `author` (`Clarity`) | Apply the finding's Next step. |
 | `gate-revised` | Apply the gate's Next step, and mark it `gate 修改，未經 exchange` in `## Review 紀錄`. |
 | `accepted` | Apply the accepted text. For a `Design question` whose Next step is a check, run the check when you can and write its result into the document; otherwise move it to the open decisions. |
 | `accepted` `Optional trade-off` | Apply the option the accepted text recommends. Without a recommendation, move it to the open decisions. |
 | `unverified` | Build the probe the row names. Apply the finding when the probe confirms it; otherwise move it to the open decisions with the probe result. |
 | `unresolved` | Move it to the open decisions: the question, each reviewer's strongest argument with its evidence, and the check that would decide it. |
-| any accepted status, Decision `edge` | Add a row to the edge-case test list in `驗證`: the input, the expected result, and the PR that tests it. Do not change the design text. |
 | `dropped`, `merged` | No edit. |
 | Late findings | Judge each one; record what you applied in the ledger. |
 
