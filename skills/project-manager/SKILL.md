@@ -134,9 +134,12 @@ language:
    - the worktree, the branch, and the build and test commands;
    - open questions the brief could not settle, so the PR session asks the
      user before it codes around them;
-   - last, the section in `references/finish.md`, with `{{STATUS_PATH}}`
+   - last, the sections in `references/finish.md`, with `{{STATUS_PATH}}`
      replaced by `briefs/<project-id>/<item-id>.status.json` under the
-     projects root (absolute path).
+     projects root (absolute path), `{{ITEM_LABEL}}` by
+     `<project-id>:<item-id>`, and `{{PROJECT_ID}}` and `{{ITEM_ID}}` by the
+     ids. Write the build and test commands above as
+     commands to run through the build slot it describes.
    Read only what these need: the project file, the headings of the design
    document and the sections of this item, and `git` state. Do not survey the
    code for file:line references; the PR session does that.
@@ -162,11 +165,29 @@ the brief's Finish section says: `implementing`, `reviewing` (an automatic
 `cross-agent-review` once the tests pass), `needs_you` with its questions,
 and `ready_to_commit`. The Projects page shows the state on the item's card
 and lists `needs_you` questions and `ready_to_commit` under "Needs you". The
-session deletes the file once its PR is open. `status` reports these states
+session runs `projects.py link-pr <project> <item> <number>` once its PR is
+open: it records the PR in the project file and removes the status file. `status` reports these states
 with the items in progress.
 
 ## Following PR Sessions
 
+`status` prints each session's state next to its item, and the design and
+manager sessions above the items:
+
+| State | Meaning |
+| --- | --- |
+| `running` | its process is alive and the model is working |
+| `waiting` | its process is alive and its turn ended: it waits for the user |
+| `interrupted` | its process is gone while the model owed an answer, or while its status file still says implementing or reviewing |
+| `closed` | its process is gone after its turn ended |
+
+The process comes from the `record-session-process` hook or a `--resume`
+argument. Report every `interrupted` session to the user first: they open it
+from the Projects page and tell it to continue. An item with a session shows
+as `Started`, not `Ready`.
+
+- PR sessions report through their status files, not by messages: read them
+  with `status`. Messages from a PR session are optional extras.
 - Find the PR sessions with `ListAgents`; the Projects page names each one in
   its first prompt tag, `[project:<id> item:<item-id>]`.
 - Subscribe with `SendMessage` and `notify_when_idle` to the sessions whose
