@@ -163,8 +163,9 @@ sub-project change also changes the parent's page, so sync both.
 A PR session keeps `briefs/<project-id>/<item-id>.status.json` current, as
 the brief's Finish section says: `implementing`, `reviewing` (an automatic
 `cross-agent-review` once the tests pass), `needs_you` with its questions,
-and `ready_to_commit`. The Projects page shows the state on the item's card
-and lists `needs_you` questions and `ready_to_commit` under "Needs you". The
+and `submitting` (it commits, pushes, and opens a draft PR without asking).
+The Projects page shows the state on the item's card and lists `needs_you`
+questions under "Needs you". The
 session runs `projects.py link-pr <project> <item> <number>` once its PR is
 open: it records the PR in the project file and removes the status file. `status` reports these states
 with the items in progress.

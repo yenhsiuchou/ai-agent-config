@@ -106,8 +106,10 @@ After the user approves:
 1. Change the code on the branch that owns it. Merge it up the stack with a
    signed-off merge.
 1. Run the tests that cover the change, and the mutations from Step 4.
-1. Show the diff and get approval before commit and push, following the
-   project's commit and PR rules.
+1. Run a code review of the change and apply its real findings, then commit
+   and push without asking the user, following the project's commit and PR
+   rules. The user already approved which comments to fix in Step 6; ask
+   again only when a fix would change the design.
 1. Update the PR description so that it still matches the diff.
 1. Draft the replies with `reader-first-writing`. Each reply states what
    changed, or the evidence for not changing it, in one or two sentences. A

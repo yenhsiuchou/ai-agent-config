@@ -82,6 +82,9 @@ it is more specific or stricter.
   depends on that project's code, tools, contracts, or team process. Do not
   copy a personal skill into a project repository for convenience.
 - When ownership is unclear, ask before choosing a skill location.
+- After adding or changing a memory, skill, hook, or rule in this file, run
+  the `agent-config-review` skill in `changed` mode on the changed files, so
+  that no two sources ask for different behavior in the same situation.
 
 ## Review Skill Selection
 

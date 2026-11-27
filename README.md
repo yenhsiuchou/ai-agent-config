@@ -8,7 +8,8 @@ Shared, tool-neutral preferences and reusable skills for coding agents.
 - `skills/`: reusable workflows with the Agent Skills `SKILL.md` format.
 - `hooks/`: Claude Code hook scripts: the confirmation before posting a
   GitHub PR review or comment, and the `[<PR number>]` prefix on the title of
-  a PR review session that Work Hub starts.
+  a PR review session that Work Hub starts, and the reminder to run
+  `agent-config-review` after an edit to a rule, memory, skill, or hook.
 - `claude/settings-hooks.json`: the hook entries that use those scripts.
 - `install.sh`: links this repository into Codex and Claude Code.
 - `scripts/check-public-content.py` and `githooks/`: the pre-commit and
@@ -60,6 +61,10 @@ published, run:
 python3 scripts/check-public-content.py --tree      # files at HEAD
 python3 scripts/check-public-content.py --history   # every version in all refs
 ```
+
+`agent-config-review` reads its source list from
+`~/.agent-config-local/agent-config-review.json`, which names the editable
+and read-only rules, memory, skills, and hooks.
 
 Project-specific review context, which skills read when it exists, lives in
 `~/.agent-config-local/review-context/<repository directory name>/`.

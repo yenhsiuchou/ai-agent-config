@@ -38,8 +38,7 @@ for it. Put a result the user should read in `step`, or in a file named by
 | `implementing` | from the first edit until the build and the tests pass | empty |
 | `reviewing` | while `cross-agent-review` runs and its findings are applied; `step` names the review step | empty |
 | `needs_you` | a question waits for the user | one line per question, each naming its finding or decision |
-| `ready_to_commit` | the review is applied and the tests pass again | empty; `report` is the review's archived `final.md` |
-| `submitting` | the user agreed; you commit, push, and open the PR | empty |
+| `submitting` | the review is applied and the tests pass again; you commit, push, and open a draft PR | empty; `report` is the review's archived `final.md` |
 
 1. Write `implementing` and `branch` before the first edit. The page finds
    the PR by this branch once it is open.
@@ -54,11 +53,13 @@ for it. Put a result the user should read in `step`, or in a file named by
    not change the design in this session: name the design decision the
    finding contradicts, and let the user take it to the design session.
    After the answer, clear `questions` and go back to `reviewing`.
-1. When everything is applied and the tests pass, write `ready_to_commit`
-   with `report`, then show the user the summary and the diff. Commit, push,
-   and open the PR only after the user agrees.
-1. Once the user agrees, write `submitting`: from here the work does not
-   need the user unless it gets stuck, which is `needs_you` again.
+1. When everything is applied and the tests pass, write `submitting` with
+   `report`, then commit, push, and open a draft PR without asking the
+   user. Follow the repository's commit and PR rules. Check each claim in
+   the commit message and the PR description against the diff and the
+   commands you ran, then run the `reader-first-writing` cold-reader check
+   on the PR description. From here the work does not need the user unless
+   it gets stuck, which is `needs_you` again.
 1. After the PR is open, record it, which also removes the status file; the
    page then follows the PR on GitHub. The page also finds it by `branch`
    within a few minutes if this step is missed:
