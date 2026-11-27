@@ -28,7 +28,7 @@ The first argument selects the mode. With no argument, run `full`.
 
 - `full`: review every source against every other source.
 - `changed <path>...`: review only the rules in the given files, each against
-  every source. The `remind-agent-config-review` hook asks for this mode after
+  every source. The `remind-review-after-edit` hook asks for this mode after
   an edit.
 
 ## Step 1: Mechanical Check

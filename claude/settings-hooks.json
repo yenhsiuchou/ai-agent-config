@@ -49,7 +49,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "python3 ~/.claude/hooks/remind-agent-config-review.py",
+            "command": "python3 ~/.claude/hooks/remind-review-after-edit.py",
             "timeout": 10
           }
         ]
