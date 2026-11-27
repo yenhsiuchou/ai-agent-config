@@ -131,6 +131,15 @@ say why; next week's retro then sees it as not applied. End with one line per
 experiment: its id and what changed in which skill or file, in words (no
 commit hashes), then the path of `retro.md`.
 
+After the week is closed, run the `agent-config-review` skill in `full` mode.
+The per-edit reviews check only the files an edit touched; this weekly pass
+also catches references that went stale without an edit, such as a merged PR
+or a deleted file, and changes made outside Claude. Commit its mechanical
+fixes in the repository that owns each file; memory has no repository. Its
+semantic conflicts are questions for the user:
+list them after the experiment lines and leave them for the user to answer
+in this session.
+
 Where each landing lives:
 
 | Landing | Where |
