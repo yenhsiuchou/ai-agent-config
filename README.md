@@ -8,7 +8,7 @@ Shared, tool-neutral preferences and reusable skills for coding agents.
 - `skills/`: reusable workflows with the Agent Skills `SKILL.md` format.
 - `hooks/`: Claude Code hook scripts: the confirmation before posting a
   GitHub PR review or comment, and the `[<PR number>]` prefix on the title of
-  a session that reviews a PR.
+  a PR review session that Work Hub starts.
 - `claude/settings-hooks.json`: the hook entries that use those scripts.
 - `install.sh`: links this repository into Codex and Claude Code.
 - `scripts/check-public-content.py` and `githooks/`: the pre-commit and

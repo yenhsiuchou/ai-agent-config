@@ -6,7 +6,7 @@
 | Design work on a project | `[design] <project title>` | the tag `[project:<id> design]` |
 | Project manager | `[manager] <project title>` | the tag `[project:<id> manager]` |
 | Work on one project item | `[<item label>] <project title>` | the tag `[project:<id> item:<item id>]` |
-| Review of a PR, or of its comments | `[<number>] <PR title>` | a review word and a PR URL, `#<number>`, `PR <number>`, or a number after a review slash command; the number has at least 3 digits |
+| Review of a PR, or of its comments, started from Work Hub | `[<number>] <PR title>` | the tag `[pr-review:<number>]`, which Work Hub's review buttons put in the prompt |
 
 A project tag decides the title even when the prompt also names a PR, and it
 replaces any earlier title. When the prompt has no tag and the session has no
@@ -27,14 +27,7 @@ import subprocess
 import sys
 from pathlib import Path
 
-REVIEW_WORD = re.compile(r"review|審查|審核|審閱", re.I)
-PR_NUMBER = r"(\d{3,})\b"
-PR_REFERENCES = [
-    re.compile(r"/pull/" + PR_NUMBER),
-    re.compile(r"\bPR\s*#?\s*" + PR_NUMBER, re.I),
-    re.compile(r"(?<![\w&])#" + PR_NUMBER),
-    re.compile(r"^\s*/[\w:-]*review[\w:-]*\s+(?:\S+\s+)*?#?" + PR_NUMBER, re.I | re.M),
-]
+PR_REVIEW_TAG = re.compile(r"\[pr-review:(\d+)\]")
 PROJECT_TAG = re.compile(r"\[project:([A-Za-z0-9._-]+)\s+(manager|design|item:([A-Za-z0-9._-]+))\]")
 MISTAKEN_PREFIX = re.compile(r"^\[\d{1,2}\]\s*")
 TITLED = re.compile(r"^\[[^\]]+\]")
@@ -43,13 +36,8 @@ LOCAL_CONFIG = Path("~/.agent-config-local/session-titles.json").expanduser()
 
 
 def find_pr_number(prompt: str) -> str | None:
-    if not REVIEW_WORD.search(prompt):
-        return None
-    for pattern in PR_REFERENCES:
-        match = pattern.search(prompt)
-        if match:
-            return match.group(1)
-    return None
+    match = PR_REVIEW_TAG.search(prompt)
+    return match.group(1) if match else None
 
 
 def read_pr_title(number: str, cwd: str | None) -> str | None:
