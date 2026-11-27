@@ -1,6 +1,6 @@
 ---
 name: weekly-retro
-description: Run one step of the weekly retro of the user's development and agent workflow - draft the week's frictions, experiment candidates, and global rules to retire from facts.json, apply the experiments and retirements the user chose, or discuss a draft. Use when a prompt starts with /weekly-retro draft|apply|discuss <week dir>, which the Work Hub Retro tab sends; not for project status or PR review.
+description: Run one step of the weekly retro of the user's development and agent workflow - draft the week's frictions and experiment candidates from facts.json, apply the experiments the user chose, or discuss a draft. Use when a prompt starts with /weekly-retro draft|apply|discuss <week dir>, which the Work Hub Retro tab sends; not for project status or PR review.
 ---
 
 # Weekly Retro
@@ -14,7 +14,7 @@ One retro is a week directory (`.../retros/2026-W48/`):
 | File | Written by | Holds |
 | ---- | ---------- | ----- |
 | `facts.json` | `retro.py collect`, no LLM | what happened in the period, `metrics`, `signals`, `previous_experiments`, `missing` sources |
-| `draft.json` | this skill, `draft` mode | frictions, experiment candidates, and rules to retire |
+| `draft.json` | this skill, `draft` mode | frictions and experiment candidates |
 | `decisions.json` | the Retro tab only | the user's verdicts and chosen experiments |
 | `retro.md` | `retro.py close` | the closed record |
 
@@ -66,12 +66,6 @@ the summary's in `summary_refs`); the page shows them on hover.
     "measure": "how next week shows it worked, using facts.metrics keys where possible",
     "addresses": ["f1"],
     "refs": []
-  }],
-  "retire": [{
-    "id": "<the exact id from facts.rules.entries>",
-    "category": "subsumed | model-default | obsolete | too-specific",
-    "reason": "one or two sentences naming what makes the rule unneeded",
-    "refs": []
   }]
 }
 ```
@@ -101,28 +95,6 @@ Rules:
   case, and then name the week it was turned down and the new fact.
 - When `facts.missing` names a source, add a `summary` bullet saying what that hides.
 
-### Rules to retire
-
-`facts.rules.entries` lists each bullet of the user's global rules
-(`AGENTS.md`). Rules only grow through promotions and experiments; `retire`
-is where they shrink. Propose 0 to 3 rules, each with `eligible: true`;
-`retro.py` rejects any other. Read every entry, eligible or not, since one rule
-can make another unneeded. Propose a rule only when one category holds:
-
-| Category | Holds when |
-| -------- | ---------- |
-| `subsumed` | another rule, a skill, or a hook already gives the same behavior; `reason` names it |
-| `model-default` | the agent does this without being told; `reason` says what in this week's sessions shows it |
-| `obsolete` | the tool, file, skill, or workflow it names no longer exists or is no longer used |
-| `too-specific` | it fits one past incident and gives no guidance for other situations |
-
-A rule that a session this week needed, or that the user stated again, stays.
-Weigh the cost of a wrong retirement: when a rule guards against an
-irreversible or outward-facing mistake (a push, a post, a deleted file),
-do not propose it unless it is `subsumed` by something that enforces it.
-An empty `retire` is a normal outcome. `reason` follows the same text rules
-as the rest of the draft.
-
 ## apply
 
 A session that runs without the user: the user chose the experiments on the
@@ -131,17 +103,9 @@ The work is:
 
 - each experiment in `decisions.chosen` whose `landing` is not `habit`;
 - each previous experiment the user marked `adjust` (change it as its new
-  evidence suggests) or `drop` (revert it);
-- each rule the user marked `retire` in `decisions.retire`.
+  evidence suggests) or `drop` (revert it).
 
-Retire the rules first, with one command:
-`python3 ~/WorkSpace/Notes/tools/pr-triage/retro.py retire <week>`. It
-deletes each rule from `AGENTS.md`, commits each one, and marks it applied.
-Do not edit those rules by hand. It prints why it skipped a rule (the text
-changed, or `AGENTS.md` has uncommitted changes); a skipped rule stays
-unapplied, so report it in the end lines and do not retry it another way.
-
-Then, for each experiment:
+For each one, in turn:
 
 1. Make the change where its landing lives (table below). Keep it to what the
    experiment says; follow the target's own style and rules.
@@ -164,8 +128,8 @@ When every one is committed and marked, close the week:
 `python3 ~/WorkSpace/Notes/tools/pr-triage/retro.py close <week>`. If an
 experiment could not be applied, leave it unmarked, close the week anyway, and
 say why; next week's retro then sees it as not applied. End with one line per
-experiment and per rule marked retire: its id and what changed in which skill
-or file, in words (no commit hashes), then the path of `retro.md`.
+experiment: its id and what changed in which skill or file, in words (no
+commit hashes), then the path of `retro.md`.
 
 After the week is closed, run the `agent-config-review` skill in `full` mode.
 The per-edit reviews check only the files an edit touched; this weekly pass
