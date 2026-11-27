@@ -46,6 +46,8 @@ it is more specific or stricter.
 
 - Reply in Chinese and English. Keep technical terms, code, and identifiers in
   English; write other explanation in Chinese.
+- Write plan-mode plan files and reports for the user in Chinese the same way:
+  keep technical terms, code, identifiers, and file paths in English.
 - Use simple English with direct words and sentences. Do not use Japanese.
 
 ## Content And Code
