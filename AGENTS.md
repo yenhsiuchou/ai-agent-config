@@ -41,6 +41,12 @@ it is more specific or stricter.
 - For small, reversible details, make a reasonable assumption and state it in
   the handoff.
 - State design flaws, technical debt, and limits plainly.
+- When a conclusion depends on code behavior, finish the trace before you
+  report it: name the exact function, its callers, and whether it is on the
+  path. Follow the actual calls from the entry point; a name match is not a
+  trace. Do not report a half-checked claim with a "not fully confirmed"
+  caveat. A review skill that gives a finding an explicit status, such as
+  `unverified` with its next probe, keeps that status.
 
 ## Language
 
