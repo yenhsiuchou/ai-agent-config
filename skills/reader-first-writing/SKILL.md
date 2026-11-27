@@ -42,6 +42,11 @@ when a wrong choice would materially change the text.
    subject only by what it is not.
 7. **Match size to the change.** Small diffs need short descriptions. Put
    details after the main point.
+8. **Delete before you explain.** When a reader or reviewer cannot follow a
+   term, first ask whether the text needs it. A term that renames something
+   the text already names another way goes; reuse the existing name. Add an
+   explanation only for a concept the reader needs. When the reader asks for
+   a reference, give a link to the code symbol or document, not a paragraph.
 
 ## By Artifact
 
@@ -108,7 +113,8 @@ does. For each diagnostic, say in one line what input it rejects."
 Compare the report with the intended change:
 
 - Rewrite text when the summary is wrong or vague.
-- Use the code name, define, or remove every guessed term.
+- For every guessed term, remove it, use the code name, or define it, in that
+  order of preference (General Rule 8).
 - Split the hardest sentence.
 
 Run at most one more independent check after rewriting. If anything remains

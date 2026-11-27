@@ -266,8 +266,10 @@ any substantive problem.
 1. Apply the wording points and fix every finding the final read marks
    `wrong` or `missing`. When the two reviewers' wording points conflict,
    choose the one that changes the meaning less.
-1. Resolve every phrase that a cold read had to guess: define it in `名詞`,
-   replace it with the code name, or delete it. Split each sentence named as
+1. Resolve every phrase that a cold read had to guess, preferring in this
+   order: delete it when the document already names the concept another way,
+   replace it with the code name, or define it in `名詞`
+   (`reader-first-writing` General Rule 8). Split each sentence named as
    the hardest to read.
 1. Do not start a fourth round. For each substantive problem from the final
    read:
