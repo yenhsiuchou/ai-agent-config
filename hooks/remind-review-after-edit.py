@@ -20,8 +20,9 @@ For Bash, the detection is best effort. A file counts as changed when it is a
 redirect target (`>`, `>>`), an argument of `sed -i`, `tee`, `rm`, or
 `truncate`, or the destination of `cp` or `mv`; sed's script is not a file.
 A target that still holds `$` or a backtick after expanding the hook's own
-environment, such as a variable the command itself sets, is skipped. Edits
-made inside a script that the command runs are missed.
+environment, such as a variable the command itself sets, is skipped. Heredoc
+bodies are input text, so a `>` inside one is not a redirect. Edits made
+inside a script that the command runs are missed.
 
 Each file is reminded once per session and watch. On any unexpected input, the
 hook prints nothing and exits 0.
@@ -30,6 +31,7 @@ import glob
 import hashlib
 import json
 import os
+import re
 import shlex
 import subprocess
 import sys
@@ -47,6 +49,8 @@ ANY_ARGUMENT = {"tee", "rm", "truncate"}
 LAST_ARGUMENT = {"cp", "mv"}
 REDIRECTS = {">", ">>", "&>", "1>", "2>"}
 SEPARATORS = {";", "&&", "||", "|", "&"}
+# `<<WORD`, `<<-WORD`, `<<'WORD'`, `<<"WORD"`; `<<<` is a here-string, not a heredoc.
+HEREDOC_START = re.compile(r"(?<!<)<<(?!<)(-?)\s*(['\"]?)([A-Za-z_][A-Za-z0-9_]*)\2")
 
 
 @dataclass
@@ -138,10 +142,24 @@ def sed_files(words: list[str]) -> list[str]:
     return operands if script_given else operands[1:]
 
 
+def without_heredoc_bodies(command: str) -> str:
+    """The command with each heredoc body removed; the line that opens it stays."""
+    kept, pending = [], []
+    for line in command.split("\n"):
+        if pending:
+            strip_tabs, word = pending[0]
+            if (line.lstrip("\t") if strip_tabs else line) == word:
+                pending.pop(0)
+            continue
+        kept.append(line)
+        pending = [(dash == "-", word) for dash, _, word in HEREDOC_START.findall(line)]
+    return "\n".join(kept)
+
+
 def bash_targets(command: str, cwd: str) -> list[Path]:
     """The files a Bash command writes, by the rules in the module docstring."""
     try:
-        lexer = shlex.shlex(command, posix=True, punctuation_chars=";&|<>")
+        lexer = shlex.shlex(without_heredoc_bodies(command), posix=True, punctuation_chars=";&|<>")
         lexer.whitespace_split = True
         tokens = list(lexer)
     except ValueError:
