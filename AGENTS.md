@@ -62,6 +62,9 @@ it is more specific or stricter.
 - Start explanations with a simple intuition, then introduce technical detail.
 - Keep code comments about the code's behavior or design constraint. Put
   reasoning history and before/after discussion in commits or reviews.
+- When you link to a file, use a repo-relative path for a file inside the
+  current repository and an absolute path for any file outside it. Never use a
+  `file://` URI; the user's editor cannot open it.
 - When the user asks to design a new feature with them, asks for a top-down
   design, or runs `/top-down-design`, use the `top-down-design` skill. It
   decides one level at a time and calls `cross-agent-design-doc` once at the
