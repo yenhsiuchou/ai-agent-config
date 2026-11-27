@@ -32,6 +32,26 @@ it is more specific or stricter.
 - Split large changes into small, self-contained changes that can be reviewed,
   verified, and reverted independently.
 
+## Git Branches
+
+- When you start work on a branch, run `git fetch` first. If local `main` is
+  behind `origin/main`, fast-forward it (`git fetch origin main:main`).
+- On a branch that is not pushed yet, rebase onto `main` when you need newer
+  `main` changes.
+- On a branch that is already pushed, fast-forward to `origin/<branch>` first
+  (`git merge --ff-only origin/<branch>`), because the remote may hold a
+  "Update branch" merge or a teammate's commit. If the fast-forward fails
+  because both sides have new commits, stop and ask.
+- A pushed branch based on `main`: do not rebase. Merge `main` in if you need
+  it, then plain push.
+- A pushed stacked branch (based on another PR's branch): when the base branch
+  changes or is merged, rebase onto the new base
+  (`git rebase --onto <new base> <old base>`; after the base PR is
+  squash-merged, the new base is `main`).
+- Force-push only after such a stacked rebase, and use
+  `git push --force-with-lease --force-if-includes`, so git refuses the push
+  when the remote holds commits your branch does not include.
+
 ## Clarification
 
 - Before starting work, ask when anything is unclear or ambiguous. Do not make
